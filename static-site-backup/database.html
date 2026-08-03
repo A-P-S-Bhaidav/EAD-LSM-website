@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Database - EAD/LSM</title>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #FAFAFA; margin: 0; padding: 0; color: #333; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+    h1 { margin-top: 0; }
+    
+    /* Login Form */
+    #login-section { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 400px; margin: 80px auto; }
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 0.9em; }
+    .input-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 1em; }
+    button { background: #0A0A0A; color: white; border: none; padding: 14px 24px; font-size: 1em; border-radius: 6px; cursor: pointer; width: auto; font-weight: bold; }
+    button:hover { background: #333; }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    .tab-btn { background: transparent; color: #666; border: none; padding: 10px 20px; font-size: 1.1em; cursor: pointer; font-weight: normal; }
+    .tab-btn.active { color: #0A0A0A; font-weight: bold; border-bottom: 3px solid #0A0A0A; margin-bottom: -13px; }
+    .tab-btn:hover { background: #f0f0f0; }
+
+    /* Dashboard */
+    #dashboard-section { display: none; }
+    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    
+    .view-section { display: none; }
+    .view-section.active { display: block; }
+    
+    .stats-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; display: inline-block; }
+    .stats-card h3 { margin: 0 0 10px 0; color: #666; font-size: 0.9em; text-transform: uppercase; }
+    .stats-card .count { font-size: 2.5em; font-weight: 900; margin: 0; }
+    
+    .filters, .tools { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
+    .tools { background: #f9f9f9; border: 1px dashed #ccc; }
+    .col-toggles { display: flex; gap: 15px; align-items: center; font-size: 0.9em; }
+    .col-toggles label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+    
+    table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+    th, td { padding: 16px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; color: #555; }
+    tr:last-child td { border-bottom: none; }
+    
+    .action-btn { background: #f44336; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 0.8em; cursor: pointer; }
+    .action-btn:hover { background: #d32f2f; }
+    
+    .export-btn { background: #4CAF50; }
+    .export-btn:hover { background: #45a049; }
+    
+    .error-msg { color: #d32f2f; margin-top: 15px; text-align: center; font-size: 0.9em; display: none; }
+  </style>
+  
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Login Section -->
+    <div id="login-section">
+      <h1 style="text-align:center; margin-bottom: 30px;">Database Access</h1>
+      <div class="input-group">
+        <label>Admin Name</label>
+        <input type="text" id="admin-name" placeholder="Enter your name">
+      </div>
+      <div class="input-group">
+        <label>Admin Email</label>
+        <input type="email" id="admin-email" placeholder="Enter your email">
+      </div>
+      <button onclick="handleLogin()" style="width:100%">Access Database</button>
+      <div id="login-error" class="error-msg">Invalid credentials.</div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section">
+      <div class="header-row">
+        <div>
+          <h1>Master Database Portal</h1>
+          <p style="color: #666; margin-top: -10px;">View complete historical data across all locations.</p>
+        </div>
+        <div>
+          <button onclick="logout()" style="background: #fff; color: #0A0A0A; border: 1px solid #ccc;">Logout</button>
+        </div>
+      </div>
+      
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('ead')" id="tab-ead">EAD Database</button>
+        <button class="tab-btn" onclick="switchTab('lsm')" id="tab-lsm">LSM Database</button>
+      </div>
+
+      <!-- EAD Database View -->
+      <div id="view-ead" class="view-section active">
+        <div class="filters">
+          <div class="input-group" style="margin-bottom: 0; flex: 1; max-width: 300px;">
+            <label>Filter by Location (EAD)</label>
+            <input type="text" id="filter-location" placeholder="e.g. Delhi" onkeypress="if(event.key === 'Enter') fetchData()">
+          </div>
+          <button onclick="fetchData()" style="height: 42px;">Load Data</button>
+        </div>
+        
+        <div class="tools">
+          <strong style="color:#555;">Toggle Columns:</strong>
+          <div class="col-toggles">
+            <label><input type="checkbox" class="col-toggle" checked onchange="toggleCol(0, this.checked)"> Email</label>
+            <label><input type="checkbox" class="col-toggle" checked onchange="toggleCol(1, this.checked)"> Name</label>
+            <label><input type="checkbox" class="col-toggle" checked onchange="toggleCol(2, this.checked)"> Lucky Number</label>
+            <label><input type="checkbox" class="col-toggle" checked onchange="toggleCol(3, this.checked)"> Location</label>
+            <label><input type="checkbox" class="col-toggle" checked onchange="toggleCol(4, this.checked)"> Time</label>
+          </div>
+          <button onclick="resetView()" style="background: #2196F3; margin-left:auto; padding:8px 16px; font-size:0.9em;">Reset View</button>
+        </div>
+
+        <div class="stats-card">
+          <h3>Historical Records Found</h3>
+          <p class="count" id="total-count">0</p>
+        </div>
+        
+        <table id="ead-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Lucky Number</th>
+              <th>Location</th>
+              <th>Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr class="no-data"><td colspan="6" style="text-align:center; color:#888;">Enter a location and click Load Data.</td></tr>
+          </tbody>
+        </table>
+        
+        <button class="export-btn" onclick="exportToExcel('ead')">Download to Excel (.XLSX)</button>
+      </div>
+
+      <!-- LSM Database View -->
+      <div id="view-lsm" class="view-section">
+        <p style="color: #666;">Showing all emails of users who registered for LSM.</p>
+        <button onclick="fetchLSM()" style="margin-bottom: 20px;">Refresh LSM Data</button>
+        
+        <table id="lsm-table" style="max-width: 600px;">
+          <thead>
+            <tr>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="lsm-table-body">
+            <tr class="no-data"><td colspan="1" style="text-align:center; color:#888;">Click Refresh to load.</td></tr>
+          </tbody>
+        </table>
+        
+        <button class="export-btn" onclick="exportToExcel('lsm')">Download to Excel (.XLSX)</button>
+      </div>
+
+    </div>
+    
+  </div>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://fplzpgrkcfrvzhgdukkm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwbHpwZ3JrY2ZydnpoZ2R1a2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUwODg0ODgsImV4cCI6MjEwMDY2NDQ4OH0.Q3XXh4u5MnWimxAc0USgYhDPlOzvPvhE-GZWW0Fs9lo';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // Check session on load
+    window.onload = () => {
+      const saved = sessionStorage.getItem('db_admin_session');
+      if (saved) {
+        showDashboard();
+      }
+    };
+
+    function handleLogin() {
+      const name = document.getElementById('admin-name').value.trim();
+      const email = document.getElementById('admin-email').value.trim();
+      
+      if (name.toLowerCase() === 'anant pratap singh bhaidav' && 
+          email.toLowerCase() === 'anantbhaidav@gmail.com') {
+        
+        sessionStorage.setItem('db_admin_session', JSON.stringify({ name, email }));
+        showDashboard();
+        document.getElementById('login-error').style.display = 'none';
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+    
+    function logout() {
+      sessionStorage.removeItem('db_admin_session');
+      document.getElementById('dashboard-section').style.display = 'none';
+      document.getElementById('login-section').style.display = 'block';
+      document.getElementById('admin-name').value = '';
+      document.getElementById('admin-email').value = '';
+    }
+
+    function showDashboard() {
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('dashboard-section').style.display = 'block';
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+      
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('view-' + tab).classList.add('active');
+      
+      if(tab === 'lsm') {
+        fetchLSM(); // Auto fetch when switching to LSM tab
+      }
+    }
+
+    // -- EAD LOGIC --
+
+    async function fetchData() {
+      const loc = document.getElementById('filter-location').value.trim();
+      if (!loc) {
+        alert("Please enter a location to filter.");
+        return;
+      }
+      
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '<tr class="no-data"><td colspan="6" style="text-align:center;">Loading...</td></tr>';
+      
+      const { data, error } = await sb
+        .from('lucky_draws')
+        .select('*')
+        .ilike('event_name', loc)
+        .order('created_at', { ascending: false });
+        
+      if (error) {
+        console.error('Error fetching data:', error);
+        alert('Error fetching data from database.');
+        tbody.innerHTML = '<tr class="no-data"><td colspan="6" style="text-align:center; color:red;">Failed to load data.</td></tr>';
+        return;
+      }
+      
+      const allEntries = data || [];
+      document.getElementById('total-count').textContent = allEntries.length;
+      
+      tbody.innerHTML = '';
+      
+      if (allEntries.length === 0) {
+        tbody.innerHTML = '<tr class="no-data"><td colspan="6" style="text-align:center; color:#888;">No records found for this location.</td></tr>';
+        return;
+      }
+      
+      // Reset view before rendering new data
+      resetView(true);
+      
+      allEntries.forEach(row => {
+        const tr = document.createElement('tr');
+        const d = new Date(row.created_at).toLocaleString();
+        const emailDisp = row.email ? row.email : '<em style="color:#aaa">N/A</em>';
+        tr.innerHTML = `
+          <td>${emailDisp}</td>
+          <td>${row.name}</td>
+          <td><strong>${row.lucky_number}</strong></td>
+          <td>${row.event_name}</td>
+          <td style="font-size:0.85em; color:#777;">${d}</td>
+          <td><button class="action-btn" onclick="hideRow(this)">Hide</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleCol(colIndex, isVisible) {
+      const table = document.getElementById('ead-table');
+      const ths = table.querySelectorAll('thead th');
+      const trs = table.querySelectorAll('tbody tr');
+      
+      if(ths[colIndex]) {
+        ths[colIndex].style.display = isVisible ? '' : 'none';
+      }
+      
+      trs.forEach(tr => {
+        const tds = tr.querySelectorAll('td');
+        // skip if it's a no-data row
+        if(tr.classList.contains('no-data')) return;
+        if(tds[colIndex]) {
+          tds[colIndex].style.display = isVisible ? '' : 'none';
+        }
+      });
+    }
+
+    function hideRow(btn) {
+      const tr = btn.closest('tr');
+      tr.style.display = 'none';
+    }
+
+    function resetView(skipCheckboxes = false) {
+      if(!skipCheckboxes) {
+        document.querySelectorAll('.col-toggle').forEach(cb => cb.checked = true);
+      }
+      const table = document.getElementById('ead-table');
+      table.querySelectorAll('th, td, tr').forEach(el => el.style.display = '');
+    }
+
+    // -- LSM LOGIC --
+
+    async function fetchLSM() {
+      const tbody = document.getElementById('lsm-table-body');
+      tbody.innerHTML = '<tr class="no-data"><td colspan="1" style="text-align:center;">Loading...</td></tr>';
+      
+      const { data, error } = await sb
+        .from('user_registrations')
+        .select('email')
+        .ilike('registered_events', '%LSM%');
+        
+      if (error) {
+        console.error('Error fetching LSM data:', error);
+        if (error.code === '42P01') {
+          tbody.innerHTML = '<tr class="no-data"><td colspan="1" style="text-align:center; color:red;">"user_registrations" table missing in Supabase. Please create it.</td></tr>';
+        } else {
+          tbody.innerHTML = '<tr class="no-data"><td colspan="1" style="text-align:center; color:red;">Failed to load data.</td></tr>';
+        }
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr class="no-data"><td colspan="1" style="text-align:center; color:#888;">No LSM records found.</td></tr>';
+        return;
+      }
+      
+      data.forEach(row => {
+        if(row.email) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${row.email}</td>`;
+          tbody.appendChild(tr);
+        }
+      });
+    }
+
+    // -- EXPORT LOGIC --
+
+    function exportToExcel(tab) {
+      const tableId = tab === 'ead' ? 'ead-table' : 'lsm-table';
+      const table = document.getElementById(tableId);
+      const data = [];
+      const headers = [];
+      
+      // Extract visible headers (ignore Actions)
+      const ths = table.querySelectorAll('thead th');
+      ths.forEach((th, index) => {
+        if (th.style.display !== 'none' && th.innerText.trim() !== 'Actions') {
+          headers.push({ name: th.innerText.trim(), index: index });
+        }
+      });
+      
+      // Extract visible rows
+      const trs = table.querySelectorAll('tbody tr');
+      trs.forEach(tr => {
+        if (tr.style.display !== 'none' && !tr.classList.contains('no-data')) {
+          const rowObj = {};
+          const tds = tr.querySelectorAll('td');
+          headers.forEach(h => {
+            rowObj[h.name] = tds[h.index] ? tds[h.index].innerText.trim() : '';
+          });
+          data.push(rowObj);
+        }
+      });
+      
+      if(data.length === 0) {
+        alert("No data available to export.");
+        return;
+      }
+      
+      // Create worksheet and workbook
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Database");
+      
+      // Download file
+      const filename = tab === 'ead' ? 'EAD_Database_Export.xlsx' : 'LSM_Database_Export.xlsx';
+      XLSX.writeFile(wb, filename);
+    }
+
+  </script>
+</body>
+</html>

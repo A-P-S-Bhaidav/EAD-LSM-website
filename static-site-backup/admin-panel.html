@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - EAD</title>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #FAFAFA; margin: 0; padding: 0; color: #333; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+    h1 { margin-top: 0; }
+    
+    /* Login Form */
+    #login-section { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 400px; margin: 80px auto; }
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 0.9em; }
+    .input-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 1em; }
+    button { background: #0A0A0A; color: white; border: none; padding: 14px 24px; font-size: 1em; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; }
+    button:hover { background: #333; }
+    
+    /* Dashboard */
+    #dashboard-section { display: none; }
+    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .stats-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 30px; display: inline-block; }
+    .stats-card h3 { margin: 0 0 10px 0; color: #666; font-size: 0.9em; text-transform: uppercase; }
+    .stats-card .count { font-size: 2.5em; font-weight: 900; margin: 0; }
+    
+    table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; }
+    th, td { padding: 16px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; color: #555; }
+    tr:last-child td { border-bottom: none; }
+    
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 100; }
+    .modal { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; }
+    .modal-close { float: right; background: none; border: none; font-size: 1.5em; cursor: pointer; color: #666; width: auto; padding: 0; }
+    .winners-list { list-style: none; padding: 0; margin-top: 20px; }
+    .winners-list li { padding: 15px; background: #f9f9f9; margin-bottom: 10px; border-radius: 6px; border: 1px solid #eee; font-size: 1.1em; }
+    .winners-list li span { font-weight: 900; font-size: 1.2em; display: block; margin-top: 5px; color: #0A0A0A; }
+    
+    .error-msg { color: #d32f2f; margin-top: 15px; text-align: center; font-size: 0.9em; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Login Section -->
+    <div id="login-section">
+      <h1 style="text-align:center; margin-bottom: 30px;">Admin Login</h1>
+      <div class="input-group">
+        <label>Name</label>
+        <input type="text" id="admin-name" placeholder="Enter your name">
+      </div>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="admin-email" placeholder="Enter your email">
+      </div>
+      <div class="input-group">
+        <label>EAD Location</label>
+        <input type="text" id="admin-ead" placeholder="e.g. Delhi">
+      </div>
+      <button onclick="handleLogin()">Access Dashboard</button>
+      <div id="login-error" class="error-msg">Invalid credentials.</div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section">
+      <div class="header-row">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p style="color: #666; margin-top: -10px;">Managing <strong id="dash-location"></strong></p>
+        </div>
+        <div>
+          <button onclick="document.getElementById('draw-modal').style.display='flex'" style="width: auto;">Finalise Lucky Draw</button>
+          <button onclick="logout()" style="width: auto; background: #fff; color: #0A0A0A; border: 1px solid #ccc; margin-left: 10px;">Logout</button>
+        </div>
+      </div>
+      
+      <div class="stats-card">
+        <h3>Total Generated Today (24h)</h3>
+        <p class="count" id="total-count">0</p>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Lucky Number</th>
+            <th>Location</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <!-- Rows will be injected here -->
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+
+  <!-- Draw Modal -->
+  <div id="draw-modal" class="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" onclick="document.getElementById('draw-modal').style.display='none'">&times;</button>
+      <h2>Finalise Lucky Draw</h2>
+      <p>How many winners would you like to select at random?</p>
+      <div class="input-group" style="display:flex; gap:10px;">
+        <input type="number" id="winner-count" value="1" min="1" style="flex:1;">
+        <button onclick="selectWinners()" style="flex:1;">Pick Winners!</button>
+      </div>
+      <ul id="winners-result" class="winners-list"></ul>
+    </div>
+  </div>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://fplzpgrkcfrvzhgdukkm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwbHpwZ3JrY2ZydnpoZ2R1a2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUwODg0ODgsImV4cCI6MjEwMDY2NDQ4OH0.Q3XXh4u5MnWimxAc0USgYhDPlOzvPvhE-GZWW0Fs9lo';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let currentAdmin = null;
+    let allEntries = [];
+
+    // Check session on load
+    window.onload = () => {
+      const saved = sessionStorage.getItem('admin_session');
+      if (saved) {
+        currentAdmin = JSON.parse(saved);
+        showDashboard();
+      }
+    };
+
+    function handleLogin() {
+      const name = document.getElementById('admin-name').value.trim();
+      const email = document.getElementById('admin-email').value.trim();
+      const ead = document.getElementById('admin-ead').value.trim();
+      
+      // Hardcoded test credentials (case-insensitive)
+      if (name.toLowerCase() === 'anant pratap singh bhaidav' && 
+          email.toLowerCase() === 'anantbhaidav@gmail.com' && 
+          ead.toLowerCase() === 'delhi') {
+        
+        currentAdmin = { name, email, ead };
+        sessionStorage.setItem('admin_session', JSON.stringify(currentAdmin));
+        showDashboard();
+        document.getElementById('login-error').style.display = 'none';
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+    
+    function logout() {
+      sessionStorage.removeItem('admin_session');
+      document.getElementById('dashboard-section').style.display = 'none';
+      document.getElementById('login-section').style.display = 'block';
+      currentAdmin = null;
+      document.getElementById('admin-name').value = '';
+      document.getElementById('admin-email').value = '';
+      document.getElementById('admin-ead').value = '';
+      document.getElementById('winners-result').innerHTML = '';
+    }
+
+    async function showDashboard() {
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('dashboard-section').style.display = 'block';
+      document.getElementById('dash-location').textContent = currentAdmin.ead;
+      
+      // Fetch data (only last 24 hours)
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const { data, error } = await sb
+        .from('lucky_draws')
+        .select('*')
+        .ilike('event_name', currentAdmin.ead)
+        .gte('created_at', oneDayAgo)
+        .order('created_at', { ascending: false });
+        
+      if (error) {
+        console.error('Error fetching data:', error);
+        alert('Error fetching data from database.');
+        return;
+      }
+      
+      allEntries = data || [];
+      document.getElementById('total-count').textContent = allEntries.length;
+      
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+      
+      allEntries.forEach(row => {
+        const tr = document.createElement('tr');
+        const d = new Date(row.created_at).toLocaleString();
+        // If email is missing (old records), display N/A
+        const emailDisp = row.email ? row.email : '<em style="color:#aaa">N/A</em>';
+        tr.innerHTML = `
+          <td>${emailDisp}</td>
+          <td>${row.name}</td>
+          <td><strong>${row.lucky_number}</strong></td>
+          <td>${row.event_name}</td>
+          <td style="font-size:0.85em; color:#777;">${d}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function selectWinners() {
+      const numInput = parseInt(document.getElementById('winner-count').value);
+      const ul = document.getElementById('winners-result');
+      ul.innerHTML = '';
+      
+      if (isNaN(numInput) || numInput < 1) {
+        alert("Please enter a valid number of winners.");
+        return;
+      }
+      
+      if (numInput > allEntries.length) {
+        alert("Not enough entries to select " + numInput + " winners. Total is " + allEntries.length + ".");
+        return;
+      }
+      
+      // Shuffle array logic
+      let pool = [...allEntries];
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      
+      const winners = pool.slice(0, numInput);
+      
+      winners.forEach((w, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `Winner #${index + 1}: ${w.name} <br><span>Ticket: ${w.lucky_number}</span>`;
+        ul.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
