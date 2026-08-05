@@ -106,6 +106,7 @@ export default function DomeGallery({
                   aria-label={it.alt || 'Open image'}
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
+                  suppressHydrationWarning
                 >
                   <img src={it.src} draggable={false} alt={it.alt} />
                 </div>

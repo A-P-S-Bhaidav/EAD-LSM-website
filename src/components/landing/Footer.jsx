@@ -1,130 +1,137 @@
 'use client';
 import Image from 'next/image';
+import { ArrowUp } from 'lucide-react';
 
 export default function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="footer_container" id="footer">
-      <div className="footer_wrap u-container">
-        <div className="footer_main_wrap">
-
-          {/* Top: Three column layout */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
-            {/* Column 1: Logo + Description + Image */}
-            <div className="flex flex-col items-center md:items-start gap-4">
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/EAD-logo-transparent.png"
-                  alt="EAD Logo"
-                  width={60}
-                  height={28}
-                  className="h-[28px] w-auto object-contain brightness-0 invert opacity-80"
-                />
-                <span className="w-px h-5" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
-                <Image
-                  src="/LSM-logo-transparent.png"
-                  alt="LSM Logo"
-                  width={60}
-                  height={28}
-                  className="h-[28px] w-auto object-contain brightness-0 invert opacity-80"
-                />
-              </div>
-              <p className="text-[0.8rem] text-gray-400 leading-relaxed text-center md:text-left max-w-[280px]">
-                Empowering the next generation of entrepreneurs through awareness drives and startup meets across India.
-              </p>
-              {/* Footer image */}
-              <div className="mt-2 w-full max-w-[280px] rounded-xl overflow-hidden opacity-60">
-                <img
-                  src="https://images.unsplash.com/photo-1523050854058-8df90110c476?auto=format&fit=crop&w=400&q=80"
-                  alt="IIT Kharagpur Campus"
-                  className="w-full h-[120px] object-cover grayscale"
-                />
-              </div>
-            </div>
-
-            {/* Column 2: Quick Links */}
-            <div className="flex flex-col items-center md:items-start gap-3">
-              <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-gray-500 mb-2">Quick Links</p>
-              {[
-                { label: 'Home', href: '#home' },
-                { label: 'About EAD & LSM', href: '#what-is-ead' },
-                { label: 'Impact', href: '#impact' },
-                { label: 'Gallery', href: '#gallery' },
-                { label: 'Testimonials', href: '#testimonials' },
-                { label: 'Contact', href: '#contact' },
-              ].map(link => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-gray-300 text-[0.85rem] hover:text-white transition-colors duration-200"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-
-            {/* Column 3: Social + Address */}
-            <div className="flex flex-col items-center md:items-start gap-3">
-              <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-gray-500 mb-2">Connect With Us</p>
-              {[
-                { label: 'Instagram', href: 'https://www.instagram.com/ecell.iitkgp' },
-                { label: 'LinkedIn', href: 'https://www.linkedin.com/company/e-cell-iit-kharagpur' },
-                { label: 'Facebook', href: 'https://www.facebook.com/ecelliitkharagpur' },
-                { label: 'Twitter / X', href: 'https://twitter.com/ecell_iitkgp' },
-              ].map(link => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-300 text-[0.85rem] hover:text-white transition-colors duration-200"
-                >
-                  {link.label}
-                </a>
-              ))}
-
-              {/* Address */}
-              <div className="mt-4 pt-4 border-t border-gray-700/50 w-full">
-                <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-gray-500 mb-2">Address</p>
-                <p className="text-gray-400 text-[0.8rem] leading-relaxed">
-                  E-Cell, IIT Kharagpur<br />
-                  Kharagpur, West Bengal<br />
-                  721302, India
-                </p>
-              </div>
-
-              {/* Website Link */}
-              <div className="mt-3">
-                <a
-                  href="https://ecell-iitkgp.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-blue-400 text-[0.82rem] font-semibold hover:text-blue-300 transition-colors"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="2" y1="12" x2="22" y2="12" />
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                  </svg>
-                  ecell-iitkgp.org
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="footer_bottom_wrap">
-            <img 
-              className="footer_bottom_svg" 
-              src="/Ecell-logo.png" 
-              alt="E-Cell IIT KGP Logo"
+    <footer className="footer_container w-full bg-[#7DA6A9] text-[#0F172A] pt-16 pb-8 font-montserrat">
+      <div className="u-container max-w-7xl mx-auto px-6">
+        
+        {/* Main Grid: E-Cell Logo Left + EAD/LSM Logos & Links Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
+          
+          {/* Left Column: E-Cell Logo (Centered & Enlarged) */}
+          <div className="lg:col-span-4 flex items-center justify-center h-full self-center">
+            <Image
+              src="/Ecell-logo.png"
+              alt="E-Cell IIT Kharagpur Logo"
+              width={300}
+              height={300}
+              className="w-56 sm:w-64 md:w-72 lg:w-80 h-auto object-contain mx-auto"
+              priority
             />
-            <div className="footer_copyright">
-              <p className="u-text-sm">© {new Date().getFullYear()} E-Cell IIT KGP. All rights reserved.</p>
-              <p className="u-text-sm footer_subtitle">Empowering Student Entrepreneurs</p>
-            </div>
           </div>
+
+          {/* Right Column: EAD & LSM Logos Header + 3 Navigation Columns */}
+          <div className="lg:col-span-8 flex flex-col gap-10">
+            
+            {/* EAD & LSM Logos Header */}
+            <div className="flex items-center gap-5 flex-wrap">
+              <Image
+                src="/EAD-logo-transparent.png"
+                alt="EAD Logo"
+                width={180}
+                height={60}
+                className="h-10 md:h-14 w-auto object-contain"
+                priority
+              />
+              <span className="w-px h-8 md:h-10 bg-[#0F172A]/30" />
+              <Image
+                src="/LSM-logo-transparent.png"
+                alt="LSM Logo"
+                width={180}
+                height={60}
+                className="h-10 md:h-14 w-auto object-contain"
+                priority
+              />
+            </div>
+
+            {/* 3 Links Columns */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              
+              {/* Column 1: About Us */}
+              <div className="flex flex-col gap-3">
+                <h3 className="text-lg font-bold text-[#0F172A] font-montserrat mb-1">
+                  About Us
+                </h3>
+                <a href="#what-is-ead" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Mission
+                </a>
+                <a href="#ead-lsm-flow" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Our Flow
+                </a>
+                <a href="#impact" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Impact &amp; Metrics
+                </a>
+              </div>
+
+              {/* Column 2: Support */}
+              <div className="flex flex-col gap-3">
+                <h3 className="text-lg font-bold text-[#0F172A] font-montserrat mb-1">
+                  Support
+                </h3>
+                <a href="#contact" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Contact Us
+                </a>
+                <a href="#testimonials" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Community Feedback
+                </a>
+                <a href="#gallery" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Gallery Showcase
+                </a>
+              </div>
+
+              {/* Column 3: Social */}
+              <div className="flex flex-col gap-3">
+                <h3 className="text-lg font-bold text-[#0F172A] font-montserrat mb-1">
+                  Social
+                </h3>
+                <a href="https://www.instagram.com/iitkgp_ecell/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Instagram
+                </a>
+                <a href="https://www.linkedin.com/company/ecellkgp/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  LinkedIn
+                </a>
+                <a href="https://www.facebook.com/ecell.iitkgp/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Facebook
+                </a>
+                <a href="https://x.com/ecelliitkgp" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
+                  Twitter / X
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
+
+        {/* Bottom Horizontal Separator Bar */}
+        <div className="pt-6 border-t border-[#0F172A]/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-[#0F172A]/90">
+          <div>
+            Copyright &copy; {new Date().getFullYear()} E-Cell, IIT Kharagpur
+          </div>
+
+          <div>
+            Terms of Service
+          </div>
+
+          <button
+            onClick={scrollToTop}
+            className="flex items-center gap-1.5 hover:opacity-85 transition-opacity cursor-pointer text-xs font-semibold"
+          >
+            <span>Back to top</span>
+            <span className="p-1 rounded-md border border-[#0F172A]/40 flex items-center justify-center">
+              <ArrowUp size={12} />
+            </span>
+          </button>
+        </div>
+
       </div>
-    </div>
+    </footer>
   );
 }

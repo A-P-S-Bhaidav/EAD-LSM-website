@@ -2,8 +2,8 @@
 import { motion } from 'framer-motion';
 import DomeGallery from './DomeGallery';
 
-/* The dome's overlay blur color — must match the page bg so edges dissolve cleanly */
-const BG = '#f4f5f7';
+/* The dome's overlay blur color — must match page bg #F4F7F9 */
+const BG = '#F4F7F9';
 
 export default function Gallery() {
   return (
@@ -20,28 +20,21 @@ export default function Gallery() {
         transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
         className="relative z-10 flex flex-col items-center text-center pt-[8vh] pb-6 px-6"
       >
-        <p
-          className="text-[0.62rem] font-bold tracking-[0.28em] uppercase mb-4"
-          style={{ color: '#9ca3af' }}
-        >
-          04 &mdash; Gallery
-        </p>
-
         <h2
-          className="font-black leading-[1.04] tracking-[-0.02em] mb-5"
+          className="font-black leading-[1.04] tracking-[-0.02em] mb-5 font-montserrat"
           style={{
             fontSize: 'clamp(2.2rem, 4.8vw, 3.8rem)',
-            color: '#111827',
+            color: '#0F172A',
             maxWidth: '700px',
           }}
         >
           Moments That Built<br />
-          <span style={{ color: '#9ca3af' }}>the Ecosystem</span>
+          <span style={{ color: '#64748B' }}>the Ecosystem</span>
         </h2>
 
         <p
-          className="text-[0.9rem] leading-relaxed"
-          style={{ color: '#6b7280', maxWidth: '540px' }}
+          className="text-[0.9rem] font-montserrat font-medium leading-relaxed"
+          style={{ color: '#475569', maxWidth: '540px' }}
         >
           From packed auditoriums and startup pitches to networking sessions
           and founder interactions — explore the journey of EAD &amp; LSM across India.
@@ -75,7 +68,7 @@ export default function Gallery() {
             background: `linear-gradient(to left, ${BG}, transparent)`,
           }}
         />
-        {/* Top vignette (reinforces the dome's built-in edge-fade) */}
+        {/* Top vignette */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 z-10"

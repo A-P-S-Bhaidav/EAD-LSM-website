@@ -18,6 +18,7 @@ function FloatingField({ id, name, label, type = 'text', value, onChange, requir
         onBlur={() => setFocused(false)}
         required={required}
         autoComplete="off"
+        suppressHydrationWarning
         whileFocus={{ scale: 1.002 }}
         transition={{ duration: 0.2 }}
         className={`
@@ -63,6 +64,7 @@ function FloatingTextarea({ id, name, label, value, onChange, required }) {
         onBlur={() => setFocused(false)}
         required={required}
         rows={4}
+        suppressHydrationWarning
         whileFocus={{ scale: 1.002 }}
         transition={{ duration: 0.2 }}
         className={`
@@ -184,6 +186,7 @@ export default function ContactForm() {
               value={form.queryType}
               onChange={handleChange}
               required
+              suppressHydrationWarning
               className="w-full h-[56px] px-5 bg-white text-gray-900 text-[0.9rem] font-medium rounded-xl outline-none border border-gray-200 hover:border-gray-300 focus:border-blue-500 focus:shadow-[0_0_0_1px_#3b82f6,0_0_16px_rgba(59,130,246,0.1)] transition-all duration-200 cursor-pointer appearance-none"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
@@ -218,6 +221,7 @@ export default function ContactForm() {
             disabled={status === 'loading' || status === 'success'}
             onHoverStart={() => setArrowHovered(true)}
             onHoverEnd={() => setArrowHovered(false)}
+            suppressHydrationWarning
             whileHover={{ 
               y: -2, 
               boxShadow: '0 12px 40px rgba(37, 99, 235, 0.2)' 

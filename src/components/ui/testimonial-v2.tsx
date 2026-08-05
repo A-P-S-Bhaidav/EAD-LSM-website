@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import TestimonialsColumn from './TestimonialsColumn';
-import { firstColumn, secondColumn, thirdColumn } from './testimonials-data';
+import { firstColumn, secondColumn } from './testimonials-data';
 import './testimonials.css';
 
 export const TestimonialsColumns = () => {
@@ -9,18 +9,13 @@ export const TestimonialsColumns = () => {
     <div className="testimonials-container">
       <TestimonialsColumn 
         testimonials={firstColumn} 
-        duration={15} 
+        duration={18} 
         className="testimonials-column"
       />
       <TestimonialsColumn 
         testimonials={secondColumn} 
-        duration={19} 
-        className="testimonials-column hidden md-block"
-      />
-      <TestimonialsColumn 
-        testimonials={thirdColumn} 
-        duration={17} 
-        className="testimonials-column hidden lg-block"
+        duration={22} 
+        className="testimonials-column"
       />
     </div>
   );

@@ -8,11 +8,18 @@ module.exports = {
     extend: {
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+        inter: ["Montserrat", "sans-serif"],
+        serif: ["Montserrat", "sans-serif"],
+        sans: ["Montserrat", "sans-serif"],
       },
       colors: {
-        darkbg: "#0A0A0A",
-        cardbg: "#111111",
+        lightbg: "#F4F7F9",
+        tealbg: "#7DA6A9",
+        cardbg: "#FFFFFF",
+        primaryText: "#0F172A",
+        secondaryText: "#334155",
+        accentPrimary: "#0F172A",
+        accentTeal: "#7DA6A9",
       },
     },
   },

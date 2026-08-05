@@ -1,7 +1,6 @@
 /**
  * Cities Data Configuration
- * Contains ACTUAL lat/lng coordinates and metadata for cities where EAD has been conducted
- * Coordinates are real geographic coordinates (latitude, longitude)
+ * Contains ACTUAL lat/lng coordinates and metadata for cities where EAD & LSM have been conducted.
  */
 
 export const cities = [
@@ -9,127 +8,290 @@ export const cities = [
     id: 'kharagpur',
     name: 'IIT Kharagpur',
     shortName: 'Kharagpur',
+    region: 'East',
     lat: 22.3149,
     lng: 87.3105,
     isOrigin: true,
-    edition: 'Origin',
-    students: '5000+',
-    year: '2015-2026'
+    edition: 'Origin Hub',
+    students: '5,000+',
+    year: '2015-2026',
+    vcs: '15+',
+    startups: '50+'
   },
   {
     id: 'kolkata',
     name: 'Kolkata',
     shortName: 'Kolkata',
+    region: 'East',
     lat: 22.5726,
     lng: 88.3639,
     edition: 'EAD 2025',
-    students: '1200+',
-    year: '2025'
+    students: '1,500+',
+    year: '2025',
+    vcs: '8+',
+    startups: '25+'
   },
   {
     id: 'bhubaneswar',
     name: 'Bhubaneswar',
     shortName: 'Bhubaneswar',
+    region: 'East',
     lat: 20.2961,
     lng: 85.8245,
     edition: 'EAD 2024',
-    students: '800+',
-    year: '2024'
+    students: '1,200+',
+    year: '2024',
+    vcs: '5+',
+    startups: '18+'
+  },
+  {
+    id: 'patna',
+    name: 'Patna',
+    shortName: 'Patna',
+    region: 'East',
+    lat: 25.5941,
+    lng: 85.1376,
+    edition: 'EAD 2024',
+    students: '950+',
+    year: '2024',
+    vcs: '4+',
+    startups: '12+'
+  },
+  {
+    id: 'ranchi',
+    name: 'Ranchi',
+    shortName: 'Ranchi',
+    region: 'East',
+    lat: 23.3441,
+    lng: 85.3096,
+    edition: 'EAD 2025',
+    students: '850+',
+    year: '2025',
+    vcs: '3+',
+    startups: '10+'
   },
   {
     id: 'delhi',
-    name: 'Delhi',
+    name: 'Delhi NCR',
     shortName: 'Delhi',
+    region: 'North',
     lat: 28.7041,
     lng: 77.1025,
     edition: 'EAD 2025',
-    students: '2500+',
-    year: '2025'
+    students: '3,200+',
+    year: '2025',
+    vcs: '18+',
+    startups: '45+'
+  },
+  {
+    id: 'chandigarh',
+    name: 'Chandigarh',
+    shortName: 'Chandigarh',
+    region: 'North',
+    lat: 30.7333,
+    lng: 76.7794,
+    edition: 'EAD 2024',
+    students: '1,100+',
+    year: '2024',
+    vcs: '6+',
+    startups: '15+'
   },
   {
     id: 'jaipur',
     name: 'Jaipur',
     shortName: 'Jaipur',
+    region: 'North',
     lat: 26.9124,
     lng: 75.7873,
     edition: 'EAD 2024',
-    students: '1100+',
-    year: '2024'
+    students: '1,400+',
+    year: '2024',
+    vcs: '7+',
+    startups: '20+'
+  },
+  {
+    id: 'lucknow',
+    name: 'Lucknow',
+    shortName: 'Lucknow',
+    region: 'North',
+    lat: 26.8467,
+    lng: 80.9462,
+    edition: 'EAD 2025',
+    students: '1,600+',
+    year: '2025',
+    vcs: '8+',
+    startups: '22+'
   },
   {
     id: 'ahmedabad',
     name: 'Ahmedabad',
     shortName: 'Ahmedabad',
+    region: 'West',
     lat: 23.0225,
     lng: 72.5714,
     edition: 'EAD 2025',
-    students: '1400+',
-    year: '2025'
+    students: '1,800+',
+    year: '2025',
+    vcs: '10+',
+    startups: '30+'
+  },
+  {
+    id: 'surat',
+    name: 'Surat',
+    shortName: 'Surat',
+    region: 'West',
+    lat: 21.1702,
+    lng: 72.8311,
+    edition: 'EAD 2024',
+    students: '1,050+',
+    year: '2024',
+    vcs: '5+',
+    startups: '14+'
   },
   {
     id: 'mumbai',
     name: 'Mumbai',
     shortName: 'Mumbai',
+    region: 'West',
     lat: 19.0760,
     lng: 72.8777,
     edition: 'EAD 2025',
-    students: '3000+',
-    year: '2025'
+    students: '3,500+',
+    year: '2025',
+    vcs: '22+',
+    startups: '60+'
   },
   {
     id: 'pune',
     name: 'Pune',
     shortName: 'Pune',
+    region: 'West',
     lat: 18.5204,
     lng: 73.8567,
     edition: 'EAD 2024',
-    students: '1800+',
-    year: '2024'
+    students: '2,100+',
+    year: '2024',
+    vcs: '12+',
+    startups: '35+'
+  },
+  {
+    id: 'indore',
+    name: 'Indore',
+    shortName: 'Indore',
+    region: 'Central',
+    lat: 22.7196,
+    lng: 75.8577,
+    edition: 'EAD 2025',
+    students: '1,300+',
+    year: '2025',
+    vcs: '6+',
+    startups: '18+'
+  },
+  {
+    id: 'bhopal',
+    name: 'Bhopal',
+    shortName: 'Bhopal',
+    region: 'Central',
+    lat: 23.2599,
+    lng: 77.4126,
+    edition: 'EAD 2024',
+    students: '900+',
+    year: '2024',
+    vcs: '4+',
+    startups: '12+'
+  },
+  {
+    id: 'nagpur',
+    name: 'Nagpur',
+    shortName: 'Nagpur',
+    region: 'Central',
+    lat: 21.1458,
+    lng: 79.0882,
+    edition: 'EAD 2024',
+    students: '980+',
+    year: '2024',
+    vcs: '4+',
+    startups: '13+'
   },
   {
     id: 'hyderabad',
     name: 'Hyderabad',
     shortName: 'Hyderabad',
+    region: 'South',
     lat: 17.3850,
     lng: 78.4867,
     edition: 'EAD 2025',
-    students: '2200+',
-    year: '2025'
+    students: '2,600+',
+    year: '2025',
+    vcs: '15+',
+    startups: '40+'
   },
   {
     id: 'bengaluru',
     name: 'Bengaluru',
     shortName: 'Bengaluru',
+    region: 'South',
     lat: 12.9716,
     lng: 77.5946,
     edition: 'EAD 2025',
-    students: '2800+',
-    year: '2025'
+    students: '3,800+',
+    year: '2025',
+    vcs: '25+',
+    startups: '70+'
   },
   {
     id: 'chennai',
     name: 'Chennai',
     shortName: 'Chennai',
+    region: 'South',
     lat: 13.0827,
     lng: 80.2707,
     edition: 'EAD 2024',
-    students: '2000+',
-    year: '2024'
+    students: '2,200+',
+    year: '2024',
+    vcs: '11+',
+    startups: '28+'
+  },
+  {
+    id: 'kochi',
+    name: 'Kochi',
+    shortName: 'Kochi',
+    region: 'South',
+    lat: 9.9312,
+    lng: 76.2673,
+    edition: 'EAD 2024',
+    students: '1,100+',
+    year: '2024',
+    vcs: '5+',
+    startups: '16+'
+  },
+  {
+    id: 'visakhapatnam',
+    name: 'Visakhapatnam',
+    shortName: 'Vizag',
+    region: 'South',
+    lat: 17.6868,
+    lng: 83.2185,
+    edition: 'EAD 2025',
+    students: '950+',
+    year: '2025',
+    vcs: '4+',
+    startups: '11+'
   },
   {
     id: 'guwahati',
     name: 'Guwahati',
     shortName: 'Guwahati',
+    region: 'North East',
     lat: 26.1445,
     lng: 91.7362,
     edition: 'EAD 2024',
-    students: '600+',
-    year: '2024'
+    students: '800+',
+    year: '2024',
+    vcs: '4+',
+    startups: '10+'
   }
 ];
 
-// Origin city for drawing connections
 export const originCity = cities.find(city => city.isOrigin);
-
-// Non-origin cities for connections
 export const targetCities = cities.filter(city => !city.isOrigin);

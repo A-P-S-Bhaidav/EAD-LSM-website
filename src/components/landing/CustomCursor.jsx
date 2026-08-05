@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import useCanvasCursor from '@/hooks/useCanvasCursor';
 
 /*
   Three-layer cursor system:
@@ -17,8 +16,6 @@ export default function CustomCursor() {
   const outerRef = useRef(null);
   const glowRef  = useRef(null);
   const rafRef   = useRef(null);
-
-  useCanvasCursor();
 
   useEffect(() => {
     if (window.matchMedia('(pointer: coarse)').matches) return;
@@ -125,13 +122,6 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Canvas trail — blue oscillating bezier lines */}
-      <canvas
-        id="cursor-canvas"
-        className="pointer-events-none fixed inset-0 z-[9996]"
-        aria-hidden="true"
-      />
-
       {mounted && (
         <>
           {/* Glow blob — slowest, diffuse blue radial */}

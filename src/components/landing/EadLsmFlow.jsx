@@ -1,95 +1,155 @@
 'use client';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 
 const FLOW_STEPS = [
   {
-    step: '01',
+    number: '1',
     title: 'EAD City Roadshow',
-    desc: 'Nation-wide awareness drives in 30+ cities — keynotes, workshops, and ideation sessions with students.',
-    color: '#2563eb',
+    desc: 'Nation-wide awareness drives in 30+ cities — keynotes, workshops, and ideation sessions with student innovators across India.',
   },
   {
-    step: '02',
+    number: '2',
     title: 'Idea Incubation',
-    desc: 'Shortlisted participants refine their startup ideas with guided mentorship and pitch preparation.',
-    color: '#7c3aed',
+    desc: 'Shortlisted participants receive guided 1-on-1 mentorship, business model refining, and investor pitch deck preparation.',
   },
   {
-    step: '03',
+    number: '3',
     title: 'LSM Pitch Events',
-    desc: 'Curated local meets where founders pitch to VCs, angel investors, and domain mentors for feedback & funding.',
-    color: '#0891b2',
+    desc: 'Curated local meets connecting early-stage founders directly to VCs, angel investor networks, and domain mentors for feedback & funding.',
   },
   {
-    step: '04',
+    number: '4',
     title: 'Scale & Connect',
-    desc: 'Top startups receive mentorship, access to networks, and capital pipelines to scale their ventures nationally.',
-    color: '#059669',
+    desc: 'Top startups receive long-term mentorship, access to incubation networks, and capital pipelines to scale their ventures nationally.',
   },
 ];
 
 export default function EadLsmFlow() {
+  const containerRef = useRef(null);
+
+  // Track scroll progress through the timeline section
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start 60%', 'end 70%'],
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   return (
-    <div className="py-16 relative overflow-hidden" style={{ backgroundColor: '#f8f9fb' }}>
-      <div className="u-container">
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14"
-        >
-          <p className="text-[0.65rem] font-bold tracking-[0.25em] uppercase text-gray-400 mb-4">
-            How It Works
-          </p>
-          <h2
-            className="font-black tracking-tight text-gray-900 leading-tight mb-4"
-            style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)' }}
-          >
+    <section
+      id="ead-lsm-flow"
+      ref={containerRef}
+      className="relative py-[10vh] md:py-[14vh] bg-[#7DA6A9] text-[#0F172A] overflow-hidden font-montserrat"
+    >
+      <div className="u-container relative z-10 max-w-5xl mx-auto">
+        
+        {/* Section Header */}
+        <div className="text-center mb-16 md:mb-24">
+          <h2 className="text-3xl md:text-5xl font-montserrat font-black text-[#0F172A] tracking-tight leading-tight">
             The EAD–LSM Flow
           </h2>
-          <p className="text-gray-500 text-[0.95rem] max-w-lg mx-auto leading-relaxed">
+          <p className="text-[#0F172A]/85 font-montserrat text-sm md:text-base font-medium max-w-md mx-auto leading-relaxed mt-4">
             From awareness to investment — a seamless pipeline connecting student innovators to the startup ecosystem.
           </p>
-        </motion.div>
-
-        {/* Flow steps */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {FLOW_STEPS.map((item, i) => (
-            <motion.div
-              key={item.step}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ delay: i * 0.1, duration: 0.45 }}
-              whileHover={{ y: -6 }}
-              className="relative group bg-white rounded-2xl p-6 border border-gray-200 hover:border-gray-300 transition-all duration-300 cursor-default"
-              style={{
-                boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-              }}
-            >
-              {/* Step number */}
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-black mb-4"
-                style={{ backgroundColor: item.color }}
-              >
-                {item.step}
-              </div>
-
-              {/* Connecting arrow (not on last) */}
-              {i < FLOW_STEPS.length - 1 && (
-                <div className="hidden lg:block absolute top-[28px] -right-3 text-gray-300 text-lg z-10">
-                  →
-                </div>
-              )}
-
-              <h3 className="text-[1rem] font-bold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-[0.82rem] text-gray-500 leading-relaxed">{item.desc}</p>
-            </motion.div>
-          ))}
         </div>
+
+        {/* ── VERTICAL TIMELINE CONTAINER ── */}
+        <div className="relative font-montserrat">
+
+          {/* Symmetrical Center Line Column */}
+          <div className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-8 flex justify-center z-10 pointer-events-none">
+            {/* Background track */}
+            <div className="w-[3px] h-full bg-[#0F172A]/20" />
+            {/* Animated Progress Line */}
+            <motion.div
+              style={{ scaleY, transformOrigin: 'top' }}
+              className="absolute top-0 bottom-0 w-[3px] bg-[#0F172A]"
+            />
+          </div>
+
+          {/* Alternating Steps Grid */}
+          <div className="flex flex-col gap-16 md:gap-24 font-montserrat relative z-20">
+            {FLOW_STEPS.map((item, idx) => {
+              const isLeft = idx % 2 === 0;
+
+              return (
+                <div
+                  key={item.number}
+                  className="relative flex items-center w-full min-h-[120px]"
+                >
+                  {/* Left Column (50%) */}
+                  <div className="w-1/2 pr-6 md:pr-12 flex justify-end">
+                    {isLeft && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: '-60px' }}
+                        transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        className="text-left bg-white border border-slate-200/90 p-6 md:p-8 rounded-2xl shadow-[0_4px_20px_rgba(15,23,42,0.06)] w-full max-w-md"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-3xl md:text-4xl font-montserrat font-black text-[#0F172A]">
+                            {item.number}
+                          </span>
+                          <h3 className="text-lg md:text-2xl font-montserrat font-extrabold text-[#0F172A] tracking-tight">
+                            {item.title}
+                          </h3>
+                        </div>
+                        <p className="text-slate-600 font-montserrat text-xs md:text-sm leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </motion.div>
+                    )}
+                  </div>
+
+                  {/* Symmetrically Centered Node Dot Container */}
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center z-30 pointer-events-none">
+                    <motion.div
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true, margin: '-60px' }}
+                      transition={{ duration: 0.35 }}
+                      className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white border-[3.5px] border-[#0F172A] shadow-md box-border"
+                    />
+                  </div>
+
+                  {/* Right Column (50%) */}
+                  <div className="w-1/2 pl-6 md:pl-12 flex justify-start">
+                    {!isLeft && (
+                      <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: '-60px' }}
+                        transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        className="text-left bg-white border border-slate-200/90 p-6 md:p-8 rounded-2xl shadow-[0_4px_20px_rgba(15,23,42,0.06)] w-full max-w-md"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-3xl md:text-4xl font-montserrat font-black text-[#0F172A]">
+                            {item.number}
+                          </span>
+                          <h3 className="text-lg md:text-2xl font-montserrat font-extrabold text-[#0F172A] tracking-tight">
+                            {item.title}
+                          </h3>
+                        </div>
+                        <p className="text-slate-600 font-montserrat text-xs md:text-sm leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 }

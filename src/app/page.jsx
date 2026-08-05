@@ -66,7 +66,6 @@ export default function Home() {
             <EadLsmFlow />
             <Gallery />
             <Testimonials />
-            <RegisterNow onRegisterClick={() => setAuthOpen(true)} />
             <Contact />
             <Footer />
           </div>

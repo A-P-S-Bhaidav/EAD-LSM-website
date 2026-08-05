@@ -76,12 +76,14 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
               placeholder="Enter your email address" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
+              suppressHydrationWarning
               className="w-full py-3.5 px-4 border-2 border-gray-200 rounded-xl text-[0.95rem] font-montserrat outline-none transition-colors duration-200 text-gray-900 bg-gray-50 focus:border-blue-500 focus:bg-white placeholder-gray-400"
             />
             <button 
               className="w-full p-3.5 bg-gray-900 text-white border-none rounded-xl font-montserrat font-bold text-[0.85rem] tracking-wider uppercase cursor-pointer mt-3 transition-colors duration-200 hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed" 
               disabled={loading} 
               onClick={handleSendOTP}
+              suppressHydrationWarning
             >
               {loading ? 'Sending...' : 'Send Magic Link ➔'}
             </button>
@@ -89,6 +91,7 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
             <button 
               className="w-full p-[13px] bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-montserrat font-semibold text-[0.85rem] cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-200 hover:border-gray-400 hover:bg-gray-50" 
               onClick={() => signInWithGoogle([event])}
+              suppressHydrationWarning
             >
               <svg viewBox="0 0 24 24" className="w-5 h-5">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>

@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { useGesture } from '@use-gesture/react';
 import { clamp, wrapAngleSigned } from './dome-utils';
 
@@ -51,6 +51,21 @@ export default function useDomeInertia({
     stopInertia();
     inertiaRAF.current = requestAnimationFrame(step);
   }, [dragDampening, maxVerticalRotationDeg, stopInertia, applyTransform]);
+
+  // ── Infinite Auto-Rotation Loop ──
+  useEffect(() => {
+    let animId;
+    const autoRotate = () => {
+      if (!draggingRef.current && !focusedElRef.current && !inertiaRAF.current) {
+        const nextY = wrapAngleSigned(rotationRef.current.y + 0.14); // Infinite rotation
+        rotationRef.current.y = nextY;
+        applyTransform(rotationRef.current.x, nextY);
+      }
+      animId = requestAnimationFrame(autoRotate);
+    };
+    animId = requestAnimationFrame(autoRotate);
+    return () => cancelAnimationFrame(animId);
+  }, [applyTransform]);
 
   useGesture(
     {
