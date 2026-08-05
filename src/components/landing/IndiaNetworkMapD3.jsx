@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import {
   ComposableMap,
@@ -172,8 +172,13 @@ function NetworkBadge({ isInView }) {
 export default function IndiaNetworkMapD3() {
   const [selectedCity, setSelectedCity] = useState(null);
   const [hoveredCity, setHoveredCity] = useState(null);
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleMarkerClick = useCallback((city) => {
     setSelectedCity(city);
@@ -184,6 +189,14 @@ export default function IndiaNetworkMapD3() {
   }, []);
 
   const targetCities = useMemo(() => cities.filter(c => !c.isOrigin), []);
+
+  if (!mounted) {
+    return (
+      <div ref={containerRef} className="relative w-full h-full select-none flex items-center justify-center min-h-[400px] lg:min-h-[600px]">
+        <div className="w-[420px] h-[420px] bg-purple-500/[0.05] rounded-full blur-[90px]" />
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className="relative w-full h-full select-none">

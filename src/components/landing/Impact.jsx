@@ -1,8 +1,17 @@
 'use client';
 import { motion } from 'framer-motion';
 import { Globe, Sparkles, Coins, Handshake, ChevronRight } from 'lucide-react';
-import IndiaNetworkMapD3 from './IndiaNetworkMapD3';
+import dynamic from 'next/dynamic';
 import { useCountUp, parseNumericValue, formatCountValue } from '@/hooks/useCountUp';
+
+const IndiaNetworkMapD3 = dynamic(() => import('./IndiaNetworkMapD3'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[400px] lg:min-h-[600px] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+});
 
 // Metric Card Component with count-up animation
 function MetricCard({ metric, index }) {
