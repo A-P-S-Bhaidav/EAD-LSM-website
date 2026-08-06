@@ -19,8 +19,8 @@ const REGIONS = ['All', 'North', 'South', 'East', 'West', 'Central', 'North East
 
 // Mercator projection config — centered on India
 const PROJECTION_CONFIG = {
-  scale: 1050,
-  center: [82.5, 22.5],
+  scale: 750,
+  center: [82.5, 27.0],
 };
 
 // ── Interactive City Detail Modal ─────────────────────────────────────────────

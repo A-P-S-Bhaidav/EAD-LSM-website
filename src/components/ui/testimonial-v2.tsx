@@ -1,10 +1,17 @@
 'use client';
-import React from 'react';
+import React, { useMemo } from 'react';
 import TestimonialsColumn from './TestimonialsColumn';
-import { firstColumn, secondColumn } from './testimonials-data';
+import { Testimonial } from './testimonials-data';
 import './testimonials.css';
 
-export const TestimonialsColumns = () => {
+interface TestimonialsColumnsProps {
+  data: Testimonial[];
+}
+
+export const TestimonialsColumns: React.FC<TestimonialsColumnsProps> = ({ data }) => {
+  const firstColumn = useMemo(() => data.slice(0, Math.ceil(data.length / 2)), [data]);
+  const secondColumn = useMemo(() => data.slice(Math.ceil(data.length / 2)), [data]);
+
   return (
     <div className="testimonials-container">
       <TestimonialsColumn 
@@ -20,11 +27,3 @@ export const TestimonialsColumns = () => {
     </div>
   );
 };
-
-export default function TestimonialsSection() {
-  return (
-    <section style={{ backgroundColor: 'transparent', width: '100%' }}>
-      <TestimonialsColumns />
-    </section>
-  );
-}
