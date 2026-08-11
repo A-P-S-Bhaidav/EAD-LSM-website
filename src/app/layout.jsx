@@ -2,8 +2,8 @@ import './globals.css';
 import Script from 'next/script';
 
 export const metadata = {
-  title: 'EAD-LSM',
-  description: 'A creative studio building visual identity systems that endure.',
+  title: 'EAD-LSM | E-Cell IIT Kharagpur\'s PAN-India Initiative',
+  description: 'EAD-LSM by E-Cell IIT Kharagpur connects 35K+ students, 100+ speakers, and 100+ startups across 20+ Indian cities. Discover events, speakers & register now.',
   icons: {
     icon: '/Ecell-favicon.png',
     apple: '/Ecell-favicon.png',

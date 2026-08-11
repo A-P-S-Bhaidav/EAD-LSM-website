@@ -60,6 +60,7 @@ export default function Home() {
               showLuckyDrawBtn={showDraw} 
               luckyDrawText={drawText} 
               onLuckyDrawClick={() => setLuckyOpen(true)} 
+              onRegisterClick={() => setAuthOpen(true)}
             />
             <WhatIsEAD />
             <Impact />

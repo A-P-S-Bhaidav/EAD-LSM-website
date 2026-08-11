@@ -57,15 +57,15 @@ export default function Contact() {
           <div className="relative z-20 p-8 sm:p-12 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* ── LEFT COLUMN: Narrative & Info Grid ── */}
-            <div className="lg:col-span-6 flex flex-col justify-between h-full space-y-12">
+            <div className="lg:col-span-6 flex flex-col justify-between h-full space-y-12 animate-fade-in">
               <div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-[#0F172A] font-montserrat mb-6">
                   You Have Questions,<br />
                   <span className="text-[#0F172A]/80">We Have Answers</span>
                 </h2>
 
-                <p className="text-[#0F172A]/85 font-montserrat text-sm md:text-base font-medium leading-relaxed max-w-lg">
-                  Discover opportunities with EAD &amp; LSM — thoughtfully designed to connect student innovators with VCs, angel investors, and mentors across India.
+                <p className="text-[#0F172A]/85 font-montserrat text-sm md:text-base font-semibold leading-relaxed max-w-lg">
+                  Have questions about EAD-LSM, sponsorships, or bringing an event to your city?
                 </p>
               </div>
 
@@ -78,7 +78,7 @@ export default function Contact() {
                     Location
                   </h4>
                   <p className="text-sm font-bold text-[#0F172A] leading-snug">
-                    E-Cell, IIT Kharagpur<br />
+                    Entrepreneurship Cell, IIT Kharagpur<br />
                     West Bengal 721302, India
                   </p>
                 </div>
@@ -95,24 +95,36 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Email */}
-                <div>
-                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#0F172A]/70 mb-2">
-                    Email
+                {/* Coordinator 1: Harshita */}
+                <div className="sm:col-span-1 border-t border-[#0F172A]/10 pt-4 flex flex-col gap-1">
+                  <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#0F172A]/70">
+                    EAD-LSM Coordinator
                   </h4>
-                  <a href="mailto:ecell@iitkgp.ac.in" className="text-sm font-bold text-[#0F172A] hover:underline transition-all">
-                    ecell@iitkgp.ac.in
+                  <p className="text-sm font-black text-[#0F172A] leading-none">
+                    Harshita Garg
+                  </p>
+                  <a href="mailto:garg.harshita@ecell-iitkgp.in" className="text-xs font-bold text-[#0F172A] hover:underline transition-all mt-1">
+                    garg.harshita@ecell-iitkgp.in
+                  </a>
+                  <a href="tel:+919991330965" className="text-xs font-bold text-[#0F172A] hover:underline transition-all">
+                    +91 99913 30965
                   </a>
                 </div>
 
-                {/* Contact */}
-                <div>
-                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#0F172A]/70 mb-2">
-                    Contact
+                {/* Coordinator 2: Chaitanya */}
+                <div className="sm:col-span-1 border-t border-[#0F172A]/10 pt-4 flex flex-col gap-1">
+                  <h4 className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#0F172A]/70">
+                    EAD-LSM Coordinator
                   </h4>
-                  <p className="text-sm font-bold text-[#0F172A]">
-                    +91 98765 43210
+                  <p className="text-sm font-black text-[#0F172A] leading-none">
+                    Chaitanya Ghuge
                   </p>
+                  <a href="mailto:ghuge.chaitanya@ecell-iitkgp.in" className="text-xs font-bold text-[#0F172A] hover:underline transition-all mt-1">
+                    ghuge.chaitanya@ecell-iitkgp.in
+                  </a>
+                  <a href="tel:+917688842669" className="text-xs font-bold text-[#0F172A] hover:underline transition-all">
+                    +91 76888 42669
+                  </a>
                 </div>
 
               </div>

@@ -30,8 +30,8 @@ export default function Testimonials() {
                 We believe in the power of community
               </h2>
 
-              <p className="text-[#0F172A]/85 font-montserrat text-sm md:text-base font-medium leading-relaxed max-w-md mb-8">
-                Our goal is to create an ecosystem that founders love and rely on every day. This is why we&apos;re constantly scaling our drives across 30+ cities to connect ambitious innovators with capital, mentors, and networks.
+              <p className="text-[#0F172A]/85 font-montserrat text-sm md:text-base font-semibold leading-relaxed max-w-md mb-8">
+                EAD-LSM has hosted voices like Deepit Purkayastha (Co-Founder &amp; CEO, Inshorts), Ashutosh Naik (Chief Commercial Officer, Groww), and Ram Mohan Rao (Executive Director, SEBI), bringing real startup and investment experience directly to students.
               </p>
 
               {/* Tab Switcher */}

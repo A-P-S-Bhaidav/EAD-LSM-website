@@ -21,6 +21,7 @@ export default function CustomCursor() {
     if (window.matchMedia('(pointer: coarse)').matches) return;
     setMounted(true);
     document.documentElement.style.cursor = 'none';
+    document.documentElement.setAttribute('data-custom-cursor', '');
 
     let mx = window.innerWidth  / 2;
     let my = window.innerHeight / 2;
@@ -35,7 +36,9 @@ export default function CustomCursor() {
     const onMove = (e) => { mx = e.clientX; my = e.clientY; };
 
     const onOver = (e) => {
-      hovering = !!e.target?.closest('a, button, input, textarea, select, [role="button"], [role="link"]');
+      if (!e.target) return;
+      const hasPointer = window.getComputedStyle(e.target).cursor === 'pointer';
+      hovering = hasPointer || !!e.target.closest('a, button, input, textarea, select, [role="button"], [role="link"]');
     };
     const onOut  = () => { hovering = false; };
 
@@ -109,6 +112,7 @@ export default function CustomCursor() {
 
     return () => {
       document.documentElement.style.cursor = '';
+      document.documentElement.removeAttribute('data-custom-cursor');
       document.removeEventListener('mousemove',  onMove);
       document.removeEventListener('mouseover',  onOver);
       document.removeEventListener('mouseout',   onOut);
@@ -128,8 +132,9 @@ export default function CustomCursor() {
           <div
             ref={glowRef}
             aria-hidden="true"
-            className={`${base} z-[9997]`}
+            className={base}
             style={{
+              zIndex: 999996,
               background: 'radial-gradient(circle, rgba(59,130,246,1) 0%, transparent 70%)',
               willChange: 'transform, opacity, width, height',
               transition: 'opacity 0.35s ease, width 0.35s ease, height 0.35s ease',
@@ -140,8 +145,9 @@ export default function CustomCursor() {
           <div
             ref={outerRef}
             aria-hidden="true"
-            className={`${base} z-[9998] border`}
+            className={`${base} border`}
             style={{
+              zIndex: 999997,
               borderColor: 'rgba(67,130,202,0.4)',
               willChange: 'transform, opacity, width, height',
               transition: 'opacity 0.3s ease, border-color 0.3s ease, width 0.3s ease, height 0.3s ease',
@@ -152,8 +158,9 @@ export default function CustomCursor() {
           <div
             ref={midRef}
             aria-hidden="true"
-            className={`${base} z-[9999] border-2`}
+            className={`${base} border-2`}
             style={{
+              zIndex: 999998,
               borderColor: 'rgba(99,179,237,0.6)',
               willChange: 'transform, opacity, width, height',
               transition: 'opacity 0.2s ease, border-color 0.2s ease, width 0.25s ease, height 0.25s ease',
@@ -164,8 +171,9 @@ export default function CustomCursor() {
           <div
             ref={dotRef}
             aria-hidden="true"
-            className={`${base} z-[10000]`}
+            className={base}
             style={{
+              zIndex: 999999,
               background: 'radial-gradient(circle, #e0f2fe 0%, #7dd3fc 60%, transparent 100%)',
               boxShadow: '0 0 6px 2px rgba(125,211,252,0.6)',
               willChange: 'transform, width, height',

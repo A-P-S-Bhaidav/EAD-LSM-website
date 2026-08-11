@@ -95,6 +95,71 @@ export default function Gallery() {
           overlayBlurColor={BG}
         />
       </motion.div>
+
+      {/* ── City Chapters Grouping ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="relative z-10 w-full max-w-6xl mx-auto px-6 pb-[10vh] mt-6"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/40 backdrop-blur-md border border-slate-200/60 rounded-3xl p-8 shadow-[0_8px_30px_rgba(15,23,42,0.02)]">
+          
+          {/* EAD Chapters */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#0F172A]/70 border-b border-[#0F172A]/10 pb-2">
+              EAD Chapters ({[
+                'EAD-Pune', 'EAD-Chandigarh', 'EAD-Hyderabad', 'EAD-Raipur', 'EAD-Jabalpur',
+                'EAD-Indore', 'EAD-Nagpur', 'EAD-Lucknow', 'EAD-Bhubaneswar', 'EAD-Ranchi',
+                'EAD-Ahmedabad', 'EAD-Jamshedpur', 'EAD-Delhi(NCR)', 'EAD-Gaya', 'EAD-Kolkata',
+                'EAD-Durgapur', 'EAD-Bhagalpur'
+              ].length} Cities)
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {[
+                'EAD-Pune', 'EAD-Chandigarh', 'EAD-Hyderabad', 'EAD-Raipur', 'EAD-Jabalpur',
+                'EAD-Indore', 'EAD-Nagpur', 'EAD-Lucknow', 'EAD-Bhubaneswar', 'EAD-Ranchi',
+                'EAD-Ahmedabad', 'EAD-Jamshedpur', 'EAD-Delhi(NCR)', 'EAD-Gaya', 'EAD-Kolkata',
+                'EAD-Durgapur', 'EAD-Bhagalpur'
+              ].map((c) => (
+                <span
+                  key={c}
+                  className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/50 text-[11px] font-semibold text-slate-700 font-montserrat shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover:bg-[#0F172A] hover:text-white hover:border-[#0F172A] transition-all cursor-pointer hover:scale-[1.03]"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* LSM Chapters */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#0F172A]/70 border-b border-[#0F172A]/10 pb-2">
+              LSM Chapters ({[
+                'LSM-Kolkata', 'LSM-Pune', 'LSM-Kanpur', 'LSM-Bengaluru', 'LSM-Delhi',
+                'LSM-Jaipur', 'LSM-Indore', 'LSM-Hyderabad', 'LSM-Gurugram', 'LSM-Mumbai',
+                'LSM-Nagpur', 'LSM-Surat'
+              ].length} Cities)
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {[
+                'LSM-Kolkata', 'LSM-Pune', 'LSM-Kanpur', 'LSM-Bengaluru', 'LSM-Delhi',
+                'LSM-Jaipur', 'LSM-Indore', 'LSM-Hyderabad', 'LSM-Gurugram', 'LSM-Mumbai',
+                'LSM-Nagpur', 'LSM-Surat'
+              ].map((c) => (
+                <span
+                  key={c}
+                  className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/50 text-[11px] font-semibold text-slate-700 font-montserrat shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover:bg-[#0F172A] hover:text-white hover:border-[#0F172A] transition-all cursor-pointer hover:scale-[1.03]"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </motion.div>
     </div>
   );
 }

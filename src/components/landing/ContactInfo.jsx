@@ -22,8 +22,8 @@ const INFO_ROWS = [
       </svg>
     ),
     label: 'Phone',
-    value: '+91 8890054499',
-    href: 'tel:+918890054499',
+    value: '+91 99913 30965',
+    href: 'tel:+919991330965',
   },
   {
     icon: (
@@ -33,8 +33,8 @@ const INFO_ROWS = [
       </svg>
     ),
     label: 'Email',
-    value: 'sharma.samarth@ecell-iitkgp.in',
-    href: 'mailto:sharma.samarth@ecell-iitkgp.in',
+    value: 'garg.harshita@ecell-iitkgp.in',
+    href: 'mailto:garg.harshita@ecell-iitkgp.in',
   },
   {
     icon: (

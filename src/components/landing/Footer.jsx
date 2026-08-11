@@ -91,16 +91,16 @@ export default function Footer() {
                   Social
                 </h3>
                 <a href="https://www.instagram.com/iitkgp_ecell/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
-                  Instagram
+                  Instagram (@iitkgp_ecell)
                 </a>
                 <a href="https://www.linkedin.com/company/ecellkgp/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
-                  LinkedIn
+                  LinkedIn (ecellkgp)
                 </a>
                 <a href="https://www.facebook.com/ecell.iitkgp/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
-                  Facebook
+                  Facebook (ecell.iitkgp)
                 </a>
                 <a href="https://x.com/ecelliitkgp" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#0F172A]/80 hover:text-[#0F172A] transition-colors">
-                  Twitter / X
+                  Twitter / X (@ecelliitkgp)
                 </a>
               </div>
 
@@ -112,8 +112,9 @@ export default function Footer() {
 
         {/* Bottom Horizontal Separator Bar */}
         <div className="pt-6 border-t border-[#0F172A]/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-[#0F172A]/90">
-          <div>
-            Copyright &copy; {new Date().getFullYear()} E-Cell, IIT Kharagpur
+          <div className="flex flex-col gap-1 text-center sm:text-left">
+            <span>Copyright &copy; {new Date().getFullYear()} Entrepreneurship Cell, IIT Kharagpur</span>
+            <span className="text-[10px] text-[#0F172A]/70 font-mono tracking-wider font-bold">Rajendra Mishra School of Engineering Entrepreneurship</span>
           </div>
 
           <div>
