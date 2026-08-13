@@ -30,7 +30,7 @@ export default function TestimonialsColumn({
       >
         {[...new Array(2)].map((_, index) => (
           <React.Fragment key={index}>
-            {testimonials.map(({ text, image, name, date }, i) => (
+            {testimonials.map(({ text, image, name, handle, date }, i) => (
               <motion.li
                 key={`${index}-${i}`}
                 aria-hidden={index === 1 ? 'true' : 'false'}
@@ -52,6 +52,11 @@ export default function TestimonialsColumn({
                     />
                     <div>
                       <h4 className="testimonial-name">{name}</h4>
+                      {handle && (
+                        <p className="text-[10px] font-semibold text-slate-500 font-montserrat mt-0.5 leading-tight">
+                          {handle}
+                        </p>
+                      )}
                     </div>
                   </div>
 

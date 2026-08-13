@@ -26,9 +26,9 @@ const LSM_DATA = {
   description:
     'LSM connects emerging startups with seasoned investors through mentorship, workshops, and vibrant networking opportunities — city by city.',
   metrics: [
-    { value: '40+',    label: 'Investors',   icon: Network },
-    { value: '100+',   label: 'Startups',    icon: Briefcase },
-    { value: '30+',    label: 'Speakers',    icon: Award },
+    { value: '65+',    label: 'Investors',   icon: Network },
+    { value: '1200+',  label: 'Startups',    icon: Briefcase },
+    { value: '75+',    label: 'Speakers',    icon: Award },
     { value: '10+',    label: 'Cities',      icon: MapPin },
   ],
   supportingText: 'LSM chapters have run in Kolkata, Pune, Kanpur, Bengaluru, Delhi, Jaipur, Indore, Hyderabad, Gurugram, Mumbai, Nagpur, and Surat — pairing local founders with the capital and mentorship they need to scale.',

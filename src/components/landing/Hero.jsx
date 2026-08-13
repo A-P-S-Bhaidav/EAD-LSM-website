@@ -14,7 +14,7 @@ export default function Hero({ hasEAD, showLuckyDrawBtn, luckyDrawText, onLuckyD
           alt="EAD LSM Landing Background"
           className="hero_bg_img w-full h-full object-cover object-center"
           loading="eager"
-          src="/landing.png"
+          src="/landing_new.png"
         />
         {/* 2-Combo Light Vignette Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#F4F7F9]/70 via-[#F4F7F9]/30 to-[#F4F7F9] z-10 pointer-events-none" />

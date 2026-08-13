@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
@@ -13,9 +14,9 @@ const IndiaNetworkMapD3 = dynamic(() => import('./IndiaNetworkMapD3'), {
 
 const COMPARISON_ROWS = [
   { metric: 'Students reached', ead: '35,000+', lsm: '—' },
-  { metric: 'Speakers hosted', ead: '100+', lsm: '30+' },
-  { metric: 'Startups engaged', ead: '100+', lsm: '100+' },
-  { metric: 'Investors connected', ead: '—', lsm: '40+' },
+  { metric: 'Speakers hosted', ead: '100+', lsm: '75+' },
+  { metric: 'Startups engaged', ead: '100+', lsm: '1200+' },
+  { metric: 'Investors connected', ead: '—', lsm: '65+' },
   { metric: 'Cities covered', ead: '20+', lsm: '10+' },
 ];
 
@@ -100,20 +101,58 @@ export default function Impact() {
         </div>
 
         {/* Bottom Supporting Info & Partner Strip */}
-        <div className="w-full mt-16 pt-12 border-t border-slate-200/60 flex flex-col gap-10 items-center">
+        <div className="w-full mt-16 pt-12 border-t border-slate-200/60 flex flex-col gap-16 items-center">
           
-          {/* Supporting Text */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
-            className="text-center max-w-4xl px-4"
-          >
-            <p className="text-slate-700 text-sm md:text-base font-medium leading-relaxed font-montserrat italic">
-              "From SEBI's Executive Director to founders featured on Shark Tank India, EAD-LSM has hosted leaders from Groww, Inshorts, INDmoney, RPSG Group, EY, Symphony Ltd., and dozens of other companies across two dozen Indian cities."
-            </p>
-          </motion.div>
+          {/* Highlight Section (Quote + Newspaper Image Slot) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch max-w-5xl w-full px-4">
+            
+            {/* Left side: Highlighted Quote */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-7 bg-white/50 backdrop-blur-md border border-slate-200/80 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(15,23,42,0.04)] relative overflow-hidden flex flex-col gap-3 justify-center min-h-[160px]"
+            >
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-[#7DA6A9]" />
+              
+              <span className="text-[10px] font-mono font-black uppercase tracking-wider text-[#0F172A]/50">
+                Media & Representation
+              </span>
+              
+              <p className="text-slate-800 text-sm md:text-base font-semibold leading-relaxed font-montserrat italic relative z-10">
+                "From SEBI's Executive Director to founders featured on Shark Tank India, EAD-LSM has hosted leaders from Groww, Inshorts, INDmoney, RPSG Group, EY, Symphony Ltd., and dozens of other companies across two dozen Indian cities."
+              </p>
+            </motion.div>
+
+            {/* Right side: Newspaper / Press Image Container */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="lg:col-span-5 bg-white/40 backdrop-blur-md border border-slate-200/60 rounded-3xl p-4 shadow-[0_8px_30px_rgba(15,23,42,0.03)] flex flex-col items-center justify-center relative overflow-hidden min-h-[160px] group cursor-pointer hover:scale-[1.02] transition-all"
+            >
+              <img 
+                src="/newspaper.png" 
+                alt="EAD-LSM Press Coverage" 
+                className="w-full h-full object-cover rounded-2xl group-hover:scale-[1.05] transition-transform duration-500 absolute inset-0 z-0 opacity-90 group-hover:opacity-100"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              
+              <div className="relative z-10 flex flex-col items-center text-center p-4 select-none">
+                <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#0F172A]/70 mb-2">
+                  Featured in Press
+                </span>
+                <p className="text-[11px] font-semibold text-slate-500 font-montserrat max-w-[240px]">
+                  Click to view newspaper clipping and media coverage details.
+                </p>
+              </div>
+            </motion.div>
+            
+          </div>
 
           {/* Trusted-By Partner Strip */}
           <motion.div
@@ -121,7 +160,7 @@ export default function Impact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="w-full flex flex-col gap-6"
+            className="w-full flex flex-col gap-6 items-center"
           >
             <div className="text-center">
               <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#0F172A]/60">
@@ -129,33 +168,110 @@ export default function Impact() {
               </span>
             </div>
             
-            {/* Partners Badge list (Grid of elegant badges) */}
-            <div className="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto px-4">
-              {[
-                { name: 'Kotak Mahindra Bank', role: 'Title Partner' },
-                { name: 'REDOQ', role: 'Co-Title Partner' },
-                { name: 'Sundaram Finance', role: 'Strategic Partner' },
-                { name: 'Kuick Studio', role: 'Software Partner' },
-                { name: 'Abhibus', role: 'Associate Partner' },
-                { name: 'CNBC', role: 'Title Media Partner' },
-                { name: 'Youth Incorporated', role: 'Youth Media Partner' },
-                { name: 'V2A', role: 'Title Cap Partner' }
-              ].map((p) => (
-                <div key={p.name} className="px-4 py-2 bg-white/60 border border-slate-200/50 rounded-xl shadow-2xs hover:bg-white transition-all flex items-center gap-1.5 hover:scale-[1.03]">
-                  <span className="text-xs font-bold text-slate-800 font-montserrat">{p.name}</span>
-                  <span className="text-[9px] font-mono uppercase font-black text-slate-400">({p.role})</span>
-                </div>
-              ))}
+            {/* Partners Badge list (Horizontal Infinite Marquee Scroll) */}
+            <div className="w-full relative overflow-hidden py-6 select-none before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-12 sm:before:w-24 before:bg-gradient-to-r before:from-[#F4F7F9] before:to-transparent after:absolute after:right-0 after:top-0 after:z-10 after:h-full after:w-12 sm:after:w-24 after:bg-gradient-to-l after:from-[#F4F7F9] after:to-transparent">
+              <style>{`
+                @keyframes marquee-horizontal {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-33.33%); }
+                }
+                .animate-marquee-horizontal {
+                  display: flex;
+                  width: max-content;
+                  gap: 28px;
+                  animation: marquee-horizontal 30s linear infinite;
+                }
+                .animate-marquee-horizontal:hover {
+                  animation-play-state: paused;
+                }
+              `}</style>
+              <div className="animate-marquee-horizontal">
+                {[...Array(3)].map((_, listIdx) => (
+                  <React.Fragment key={listIdx}>
+                    {[
+                      { 
+                        name: 'Kotak Mahindra Bank', 
+                        role: 'Title Partner',
+                        logo: <img src="/kotak.svg" alt="Kotak Mahindra Bank" className="w-7 h-7 object-contain min-w-[28px]" />
+                      },
+                      { 
+                        name: 'REDOQ', 
+                        role: 'Co-Title Partner',
+                        logo: <img src="/redoq.svg" alt="REDOQ" className="w-7 h-7 object-contain min-w-[28px]" />
+                      },
+                      { 
+                        name: 'Sundaram Finance', 
+                        role: 'Strategic Partner',
+                        logo: <img src="/sundaram.png" alt="Sundaram Finance" className="w-7 h-7 object-contain min-w-[28px]" />
+                      },
+                      { 
+                        name: 'Kuick Studio', 
+                        role: 'Software Partner',
+                        logo: <img src="/kuick.png" alt="Kuick Studio" className="w-7 h-7 object-contain min-w-[28px]" />
+                      },
+                      { 
+                        name: 'Abhibus', 
+                        role: 'Associate Partner',
+                        logo: <img src="/abhibus.png" alt="Abhibus" className="w-7 h-7 object-contain min-w-[28px]" />
+                      },
+                      { 
+                        name: 'CNBC', 
+                        role: 'Title Media Partner',
+                        logo: <img src="/cnbc.svg" alt="CNBC" className="w-9 h-7 object-contain min-w-[36px]" />
+                      },
+                      { 
+                        name: 'Youth Incorporated', 
+                        role: 'Youth Media Partner',
+                        logo: <img src="/youthinc.ico" alt="Youth Incorporated" className="w-7 h-7 object-contain min-w-[28px]" />
+                      },
+                      { 
+                        name: 'V2A', 
+                        role: 'Title Cap Partner',
+                        logo: <img src="/v2a.svg" alt="V2A" className="w-7 h-7 object-contain min-w-[28px]" />
+                      }
+                    ].map((p, itemIdx) => (
+                      <div 
+                        key={`${listIdx}-${itemIdx}`} 
+                        className="px-6 py-4 bg-white/70 border border-slate-200/50 rounded-2xl shadow-3xs flex items-center gap-4 hover:bg-white hover:border-slate-300 transition-all duration-300 hover:scale-[1.03] cursor-pointer whitespace-nowrap"
+                      >
+                        {p.logo}
+                        <div className="flex flex-col items-start leading-none">
+                          <span className="text-sm font-bold text-slate-800 font-montserrat">{p.name}</span>
+                          <span className="text-[10px] font-mono uppercase font-black text-slate-400 mt-1.5">({p.role})</span>
+                        </div>
+                      </div>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
 
             {/* Previously Associated */}
-            <div className="mt-2 text-center px-4">
-              <p className="text-xs font-semibold text-slate-500 font-montserrat leading-relaxed">
-                Previously associated with:{' '}
-                <span className="text-[#0F172A] font-bold">
-                  Livpure · Google for Developers · Odoo · Krafton · Adda52
-                </span>
-              </p>
+            <div className="mt-12 flex flex-col items-center gap-5 px-4 w-full max-w-4xl mx-auto border-t border-slate-200/40 pt-10">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#0F172A]/50">
+                Previously Associated With
+              </span>
+              <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 md:gap-x-14">
+                {[
+                  { name: 'Livpure', src: '/livpure.svg', className: 'h-6 w-auto' },
+                  { name: 'Google for Developers', src: '/gdevs.svg', className: 'h-5.5 w-auto' },
+                  { name: 'Odoo', src: '/odoo.svg', className: 'h-6 w-auto' },
+                  { name: 'Krafton', src: '/krafton.svg', className: 'h-5 w-auto' },
+                  { name: 'Adda52', src: '/adda52.svg', className: 'h-7 w-auto' }
+                ].map((logo, idx) => (
+                  <div 
+                    key={idx} 
+                    className="flex items-center justify-center select-none grayscale opacity-45 hover:grayscale-0 hover:opacity-90 hover:scale-[1.05] transition-all duration-300 cursor-pointer"
+                  >
+                    <img 
+                      src={logo.src} 
+                      alt={logo.name} 
+                      title={logo.name} 
+                      className={`${logo.className} object-contain max-w-[120px]`} 
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
           </motion.div>

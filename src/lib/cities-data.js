@@ -13,7 +13,7 @@ export const cities = [
     lng: 87.3105,
     isOrigin: true,
     edition: 'Origin Hub',
-    students: '5,000+',
+    students: '1,200+',
     year: '2015-2026',
     vcs: '15+',
     startups: '50+'
@@ -26,7 +26,7 @@ export const cities = [
     lat: 22.5726,
     lng: 88.3639,
     edition: 'EAD 2025',
-    students: '1,500+',
+    students: '920+',
     year: '2025',
     vcs: '8+',
     startups: '25+'
@@ -39,7 +39,7 @@ export const cities = [
     lat: 20.2961,
     lng: 85.8245,
     edition: 'EAD 2024',
-    students: '1,200+',
+    students: '880+',
     year: '2024',
     vcs: '5+',
     startups: '18+'
@@ -52,7 +52,7 @@ export const cities = [
     lat: 25.5941,
     lng: 85.1376,
     edition: 'EAD 2024',
-    students: '950+',
+    students: '800+',
     year: '2024',
     vcs: '4+',
     startups: '12+'
@@ -65,7 +65,7 @@ export const cities = [
     lat: 23.3441,
     lng: 85.3096,
     edition: 'EAD 2025',
-    students: '850+',
+    students: '750+',
     year: '2025',
     vcs: '3+',
     startups: '10+'
@@ -78,7 +78,7 @@ export const cities = [
     lat: 28.7041,
     lng: 77.1025,
     edition: 'EAD 2025',
-    students: '3,200+',
+    students: '1,100+',
     year: '2025',
     vcs: '18+',
     startups: '45+'
@@ -91,7 +91,7 @@ export const cities = [
     lat: 30.7333,
     lng: 76.7794,
     edition: 'EAD 2024',
-    students: '1,100+',
+    students: '850+',
     year: '2024',
     vcs: '6+',
     startups: '15+'
@@ -104,7 +104,7 @@ export const cities = [
     lat: 26.9124,
     lng: 75.7873,
     edition: 'EAD 2024',
-    students: '1,400+',
+    students: '900+',
     year: '2024',
     vcs: '7+',
     startups: '20+'
@@ -117,7 +117,7 @@ export const cities = [
     lat: 26.8467,
     lng: 80.9462,
     edition: 'EAD 2025',
-    students: '1,600+',
+    students: '950+',
     year: '2025',
     vcs: '8+',
     startups: '22+'
@@ -130,7 +130,7 @@ export const cities = [
     lat: 23.0225,
     lng: 72.5714,
     edition: 'EAD 2025',
-    students: '1,800+',
+    students: '950+',
     year: '2025',
     vcs: '10+',
     startups: '30+'
@@ -143,7 +143,7 @@ export const cities = [
     lat: 21.1702,
     lng: 72.8311,
     edition: 'EAD 2024',
-    students: '1,050+',
+    students: '820+',
     year: '2024',
     vcs: '5+',
     startups: '14+'
@@ -156,7 +156,7 @@ export const cities = [
     lat: 19.0760,
     lng: 72.8777,
     edition: 'EAD 2025',
-    students: '3,500+',
+    students: '1,100+',
     year: '2025',
     vcs: '22+',
     startups: '60+'
@@ -169,7 +169,7 @@ export const cities = [
     lat: 18.5204,
     lng: 73.8567,
     edition: 'EAD 2024',
-    students: '2,100+',
+    students: '1,000+',
     year: '2024',
     vcs: '12+',
     startups: '35+'
@@ -182,7 +182,7 @@ export const cities = [
     lat: 22.7196,
     lng: 75.8577,
     edition: 'EAD 2025',
-    students: '1,300+',
+    students: '900+',
     year: '2025',
     vcs: '6+',
     startups: '18+'
@@ -195,7 +195,7 @@ export const cities = [
     lat: 23.2599,
     lng: 77.4126,
     edition: 'EAD 2024',
-    students: '900+',
+    students: '750+',
     year: '2024',
     vcs: '4+',
     startups: '12+'
@@ -208,7 +208,7 @@ export const cities = [
     lat: 21.1458,
     lng: 79.0882,
     edition: 'EAD 2024',
-    students: '980+',
+    students: '800+',
     year: '2024',
     vcs: '4+',
     startups: '13+'
@@ -221,7 +221,7 @@ export const cities = [
     lat: 17.3850,
     lng: 78.4867,
     edition: 'EAD 2025',
-    students: '2,600+',
+    students: '1,050+',
     year: '2025',
     vcs: '15+',
     startups: '40+'
@@ -234,7 +234,7 @@ export const cities = [
     lat: 12.9716,
     lng: 77.5946,
     edition: 'EAD 2025',
-    students: '3,800+',
+    students: '1,150+',
     year: '2025',
     vcs: '25+',
     startups: '70+'
@@ -247,7 +247,7 @@ export const cities = [
     lat: 13.0827,
     lng: 80.2707,
     edition: 'EAD 2024',
-    students: '2,200+',
+    students: '1,000+',
     year: '2024',
     vcs: '11+',
     startups: '28+'
@@ -260,7 +260,7 @@ export const cities = [
     lat: 9.9312,
     lng: 76.2673,
     edition: 'EAD 2024',
-    students: '1,100+',
+    students: '850+',
     year: '2024',
     vcs: '5+',
     startups: '16+'
@@ -273,7 +273,7 @@ export const cities = [
     lat: 17.6868,
     lng: 83.2185,
     edition: 'EAD 2025',
-    students: '950+',
+    students: '800+',
     year: '2025',
     vcs: '4+',
     startups: '11+'
@@ -286,7 +286,7 @@ export const cities = [
     lat: 26.1445,
     lng: 91.7362,
     edition: 'EAD 2024',
-    students: '800+',
+    students: '700+',
     year: '2024',
     vcs: '4+',
     startups: '10+'
