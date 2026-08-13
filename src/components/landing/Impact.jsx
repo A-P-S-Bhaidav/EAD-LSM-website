@@ -42,7 +42,7 @@ export default function Impact() {
         </motion.div>
 
         {/* India Network Map (D3) Full Width */}
-        <div className="w-full flex items-center justify-center min-h-[450px] lg:min-h-[550px] bg-white/30 backdrop-blur-sm rounded-3xl border border-slate-200/50 shadow-[0_8px_30px_rgba(15,23,42,0.03)] p-4 relative">
+        <div className="w-full flex items-center justify-center min-h-[450px] lg:min-h-[550px] bg-gradient-to-br from-[#EBF2F4] to-[#D5E5E8] rounded-3xl border border-slate-200/60 shadow-[0_8px_30px_rgba(15,23,42,0.03)] p-4 relative">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}

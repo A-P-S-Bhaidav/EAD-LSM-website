@@ -25,6 +25,14 @@ export default function RegisterLsmPage() {
     }
   };
 
+  const handleMenuClose = () => {
+    const menu = document.querySelector('[data-nav-menu]');
+    if (menu) {
+      menu.style.display = 'none';
+      document.documentElement.classList.remove('menu-open');
+    }
+  };
+
   const [step, setStep] = useState('form'); // form | otp | success
   const [form, setForm] = useState({
     name: '',
@@ -169,7 +177,7 @@ export default function RegisterLsmPage() {
         onMenuToggle={handleMenuToggle}
         onProfileClick={() => router.push('/profile')}
       />
-      <MobileMenu onLinkClick={() => {}} />
+      <MobileMenu onLinkClick={handleMenuClose} />
 
       <main className="relative z-20 flex-grow flex items-center justify-center pt-20 pb-8 px-4">
         <div className="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-[430px] shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-200/80 relative overflow-hidden my-auto">

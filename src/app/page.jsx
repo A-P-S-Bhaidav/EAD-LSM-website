@@ -69,18 +69,9 @@ export default function Home() {
   } = useLandingState();
 
   const handleMenuToggle = () => {
-    const menu = document.querySelector('[data-nav-menu]');
-    if (menu) {
-      const isVisible = menu.style.display === 'flex';
-      if (window.__closeMobileMenu && isVisible) {
-        window.__closeMobileMenu();
-        document.documentElement.classList.remove('menu-open');
-      } else {
-        gsap.set(menu, { display: 'flex' });
-        gsap.to(menu, { clipPath: 'inset(0 0 0% 0)', duration: 0.5, ease: 'power3.out' });
-        document.documentElement.classList.add('menu-open');
-      }
-    }
+    // On the homepage, animations.js is active and attaches its own
+    // vanilla event listener to [data-menu-toggle]. We let it handle
+    // the toggle to avoid event conflicts.
   };
 
   return (

@@ -25,6 +25,14 @@ export default function ProfilePage() {
     }
   };
 
+  const handleMenuClose = () => {
+    const menu = document.querySelector('[data-nav-menu]');
+    if (menu) {
+      menu.style.display = 'none';
+      document.documentElement.classList.remove('menu-open');
+    }
+  };
+
   const [luckyNumbers, setLuckyNumbers] = useState([]);
   const [questionnaire, setQuestionnaire] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -76,7 +84,7 @@ export default function ProfilePage() {
     return (
       <div className="flex flex-col min-h-screen bg-[#F4F7F9] font-montserrat">
         <Navbar user={user} onMenuToggle={handleMenuToggle} onProfileClick={() => {}} />
-        <MobileMenu onLinkClick={() => {}} />
+        <MobileMenu onLinkClick={handleMenuClose} />
         <main className="flex-grow flex items-center justify-center pt-28">
           <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
         </main>
@@ -89,7 +97,7 @@ export default function ProfilePage() {
     return (
       <div className="flex flex-col min-h-screen bg-[#F4F7F9] font-montserrat">
         <Navbar user={user} onMenuToggle={handleMenuToggle} onProfileClick={() => {}} />
-        <MobileMenu onLinkClick={() => {}} />
+        <MobileMenu onLinkClick={handleMenuClose} />
         <main className="flex-grow flex items-center justify-center pt-28 pb-16 px-4">
           <div className="bg-white rounded-3xl p-8 sm:p-10 w-full max-w-[440px] shadow-[0_15px_40px_rgba(15,23,42,0.05)] border border-slate-200/60 text-center">
             <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-slate-400">
@@ -136,7 +144,7 @@ export default function ProfilePage() {
         onMenuToggle={handleMenuToggle}
         onProfileClick={() => router.push('/profile')}
       />
-      <MobileMenu onLinkClick={() => {}} />
+      <MobileMenu onLinkClick={handleMenuClose} />
 
       <main className="flex-grow pt-28 pb-16 px-4">
         <div className="u-container max-w-4xl mx-auto">
