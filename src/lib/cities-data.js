@@ -71,6 +71,19 @@ export const cities = [
     startups: '10+'
   },
   {
+    id: 'durgapur',
+    name: 'Durgapur',
+    shortName: 'Durgapur',
+    region: 'East',
+    lat: 23.5204,
+    lng: 87.3119,
+    edition: 'EAD 2024',
+    students: '680+',
+    year: '2025',
+    vcs: '3+',
+    startups: '8+'
+  },
+  {
     id: 'delhi',
     name: 'Delhi NCR',
     shortName: 'Delhi',

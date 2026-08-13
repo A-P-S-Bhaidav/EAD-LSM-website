@@ -4,7 +4,7 @@ import { MapPin, Users, Award, Briefcase, Network, CheckCircle2 } from 'lucide-r
 
 const EAD_DATA = {
   step: '01 / 02',
-  badge: 'Nation-wide Roadshow',
+  badge: 'EAD AT A GLANCE',
   title: 'What is EAD (Entrepreneurship Awareness Drive)',
   description:
     'EAD is the largest PAN-India confluence of new-age entrepreneurs and students, a city-hopping series of talks and interactions reaching:',
@@ -39,53 +39,53 @@ const LSM_DATA = {
 function InitiativeCard({ data, delay = 0 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="bg-white border border-slate-200/90 rounded-[2rem] p-6 md:p-8 shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-300 relative overflow-hidden w-full max-w-2xl"
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="bg-white border border-slate-200/90 rounded-[1.5rem] p-5 md:p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] transition-all duration-300 relative overflow-hidden w-full max-w-2xl"
     >
       {/* Top Accent Line */}
       <div
-        className="absolute top-0 left-0 right-0 h-1.5 bg-[#0F172A]"
+        className="absolute top-0 left-0 right-0 h-1 bg-[#0F172A]"
       />
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <span
-          className="text-xs font-bold font-mono tracking-widest uppercase px-3 py-1 rounded-full text-white bg-[#0F172A]"
+          className="text-[10px] font-bold font-mono tracking-widest uppercase px-2.5 py-0.5 rounded-full text-white bg-[#0F172A]"
         >
           {data.step}
         </span>
-        <span className="text-[0.7rem] font-bold font-mono tracking-widest uppercase text-slate-500">
+        <span className="text-[9px] font-bold font-mono tracking-widest uppercase text-slate-500">
           {data.badge}
         </span>
       </div>
 
-      <h3 className="text-2xl md:text-3xl font-montserrat font-bold text-[#0F172A] tracking-tight mb-4 leading-tight">
+      <h3 className="text-xl md:text-2xl font-montserrat font-bold text-[#0F172A] tracking-tight mb-2 leading-tight">
         {data.title}
       </h3>
 
-      <p className="text-slate-600 font-montserrat text-base leading-relaxed mb-6">
+      <p className="text-slate-600 font-montserrat text-xs sm:text-sm leading-relaxed mb-4">
         {data.description}
       </p>
 
       {/* Metrics Grid (4 columns on desktop, 2x2 on mobile) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
         {data.metrics.map((m) => {
           const Icon = m.icon;
           return (
             <div
               key={m.label}
-              className="bg-[#F4F7F9] border border-slate-200/80 rounded-2xl p-3 flex flex-col gap-1.5"
+              className="bg-[#F4F7F9] border border-slate-200/80 rounded-xl p-2 sm:p-2.5 flex flex-col gap-1"
             >
-              <div className="w-6 h-6 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-2xs">
-                <Icon size={12} />
+              <div className="w-5 h-5 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-2xs">
+                <Icon size={10} />
               </div>
               <div>
-                <p className="text-base md:text-lg font-black text-[#0F172A] leading-none font-montserrat tracking-tight">
+                <p className="text-sm sm:text-base font-black text-[#0F172A] leading-none font-montserrat tracking-tight">
                   {m.value}
                 </p>
-                <p className="text-[0.6rem] font-bold tracking-wider uppercase text-slate-500 mt-1 font-montserrat">
+                <p className="text-[9px] font-bold tracking-wider uppercase text-slate-500 mt-0.5 font-montserrat">
                   {m.label}
                 </p>
               </div>
@@ -95,13 +95,18 @@ function InitiativeCard({ data, delay = 0 }) {
       </div>
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-2 pt-2 pb-4 border-t border-slate-100">
+      <div className="flex flex-nowrap overflow-x-auto gap-1.5 pt-2 pb-3 border-t border-slate-100 w-full no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
         {data.tags.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F4F7F9] text-slate-800 font-montserrat text-xs font-semibold"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#F4F7F9] text-slate-800 font-montserrat text-[10px] sm:text-xs font-semibold flex-shrink-0 whitespace-nowrap"
           >
-            <CheckCircle2 size={12} className="text-[#7DA6A9]" />
+            <CheckCircle2 size={10} className="text-[#7DA6A9]" />
             {tag}
           </span>
         ))}
@@ -109,7 +114,7 @@ function InitiativeCard({ data, delay = 0 }) {
 
       {/* Supporting Text */}
       {data.supportingText && (
-        <p className="text-slate-500 font-montserrat text-xs leading-relaxed mt-4 pt-4 border-t border-slate-100 italic">
+        <p className="text-slate-500 font-montserrat text-[11px] leading-relaxed mt-3 pt-3 border-t border-slate-100 italic">
           {data.supportingText}
         </p>
       )}
@@ -147,17 +152,10 @@ export default function WhatIsEAD() {
             </motion.div>
           </div>
 
-          {/* ── RIGHT COLUMN (1 CARD AT A TIME PER SCREEN VIEWPORT) ── */}
-          <div className="lg:col-span-7 flex flex-col">
-            {/* Card 1: EAD Slot */}
-            <div className="min-h-[calc(60vh-4rem)] lg:min-h-[60vh] flex items-center justify-center py-6 lg:py-10">
-              <InitiativeCard data={EAD_DATA} delay={0.1} />
-            </div>
-
-            {/* Card 2: LSM Slot */}
-            <div className="min-h-[calc(60vh-4rem)] lg:min-h-[60vh] flex items-center justify-center py-6 lg:py-10">
-              <InitiativeCard data={LSM_DATA} delay={0.2} />
-            </div>
+          {/* ── RIGHT COLUMN (BOTH CARDS VISIBLE ON ONE SCREEN) ── */}
+          <div className="lg:col-span-7 flex flex-col justify-center gap-5 py-8 lg:py-0 lg:min-h-screen">
+            <InitiativeCard data={EAD_DATA} delay={0.1} />
+            <InitiativeCard data={LSM_DATA} delay={0.2} />
           </div>
 
         </div>

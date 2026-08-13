@@ -383,12 +383,12 @@ export default function IndiaNetworkMapD3() {
                     fontFamily: 'Montserrat, sans-serif',
                     fontSize: '10px',
                     fontWeight: 900,
-                    fill: '#FFFFFF',
+                    fill: '#94A3B8', // Grey color label
                     pointerEvents: 'none',
                     letterSpacing: '0.08em',
                   }}
                 >
-                  IIT KHARAGPUR
+                  IIT KGP
                 </text>
                 <text
                   textAnchor="middle"
