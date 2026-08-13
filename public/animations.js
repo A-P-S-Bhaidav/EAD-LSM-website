@@ -165,6 +165,7 @@
   }
 
   function initSplitText(scope, { track = true } = {}) {
+    if (!scope) return;
     const targets = scope.querySelectorAll("[data-text-split]");
     targets.forEach((el) => {
       const isLines = el.getAttribute("data-lines") === "true";
@@ -474,6 +475,7 @@
   }
 
   function animateImageReveal(scope, pinnedContainer = null) {
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-img-reveal]").forEach((el) => {
       if (el.dataset.coverHandled) return;
       const config = { trigger: el, start: "top 80%" };
@@ -486,6 +488,7 @@
   }
 
   function animateImgParallax(scope, pinnedContainer = null) {
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-img-parallax]").forEach((wrap) => {
       if (wrap.dataset.coverHandled) return;
       const img = wrap.querySelector("img");
@@ -513,6 +516,7 @@
   }
 
   function animateTextLg(scope, pinnedContainer = null) {
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-text-lg]").forEach((el) => {
       if (el.dataset.coverHandled) return;
       const config = { trigger: el, start: "top 80%" };
@@ -527,6 +531,7 @@
   }
 
   function animateTextLg1(scope, pinnedContainer = null) {
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-text-lg1]").forEach((el) => {
       if (el.dataset.coverHandled) return;
       const config = { trigger: el, start: "top 80%" };
@@ -539,6 +544,7 @@
   }
 
   function animateTextMd(scope, pinnedContainer = null) {
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-text-md]").forEach((el) => {
       if (el.dataset.coverHandled) return;
       const config = { trigger: el, start: "top 80%" };
@@ -551,6 +557,7 @@
   }
 
   function animateTextBase(scope, pinnedContainer = null) {
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-text-base]").forEach((el) => {
       if (el.dataset.coverHandled) return;
       const config = { trigger: el, start: "top 80%" };
@@ -563,6 +570,7 @@
   }
 
   function animateCpt(scope, pinnedContainer = null) {
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-cpt]").forEach((el) => {
       if (el.dataset.coverHandled) return;
       const config = { trigger: el, start: "top 80%" };
@@ -641,6 +649,7 @@
   }
 
   function initHoverAnimations(scope) {
+    if (!scope) return;
     scope.querySelectorAll("[data-hover]").forEach((el) => {
       if (el.dataset.hoverInit === "1") return;
       el.dataset.hoverInit = "1";
@@ -712,10 +721,11 @@
   }
 
   function initButtons(scope) {
-
+    if (!scope) return;
     scope.querySelectorAll("[data-animate-btn]").forEach((el) => {
       const line1 = el.querySelector(".link_btn_line:not(.is-2)");
       const line2 = el.querySelector(".link_btn_line.is-2");
+      if (!line1 || !line2) return;
 
       el.addEventListener("mouseenter", () => {
         gsap.killTweensOf([line1, line2]);
@@ -830,13 +840,14 @@
   function initMobileMenu() {
     const menu = document.querySelector(".nav_menu");
     const toggleBtn = document.querySelector("[data-menu-toggle]");
-    const links = Array.from(menu.querySelectorAll(".nav_menu_link_text"));
     if (!menu || !toggleBtn) return;
+    const links = Array.from(menu.querySelectorAll(".nav_menu_link_text"));
 
     let isOpen = false;
     let isAnimating = false;
 
     const textEl = toggleBtn.querySelector(".link_btn_text");
+    if (!textEl) return;
     const { orig, clone } = setupSlideUpHover(textEl);
     if (clone) clone.textContent = "Close";
 
@@ -848,6 +859,7 @@
 
       scrollStop();
       document.documentElement.style.overflow = "hidden";
+      document.documentElement.classList.add("menu-open");
 
       links.forEach((link) => {
         gsap.set(link, { autoAlpha: 1 });
@@ -897,6 +909,7 @@
       isAnimating = true;
       const h = toggleBtn.offsetHeight;
       isOpen = false;
+      document.documentElement.classList.remove("menu-open");
       gsap.killTweensOf([orig, clone]);
       gsap.fromTo(orig, { y: -h, scale: 0.8 }, {
         y: 0,
@@ -927,6 +940,7 @@
 
     const closeInstant = () => {
       if (!isOpen) return;
+      document.documentElement.classList.remove("menu-open");
       gsap.to(links, { autoAlpha: 0, duration: 0.3, ease: "power2.in" });
       gsap.set(orig, { y: 0, scale: 1 });
       gsap.set(clone, { y: 0, scale: 0.8 });
@@ -938,6 +952,7 @@
       if (!isOpen) return;
       isOpen = false;
       isAnimating = false;
+      document.documentElement.classList.remove("menu-open");
       gsap.killTweensOf([orig, clone]);
       gsap.set(orig, { y: 0, scale: 1 });
       gsap.set(clone, { y: 0, scale: 0.8 });
@@ -1004,12 +1019,14 @@
   }
 
   function initCommon(container) {
+    if (!container) return;
     initSplitText(container, { track: true });
     initButtons(container);
     initHoverAnimations(container);
   }
 
   function initScrollAnimations(container, pinnedContainer = null) {
+    if (!container) return;
     animateCpt(container, pinnedContainer);
     animateImageReveal(container, pinnedContainer);
     animateImgParallax(container, pinnedContainer);
@@ -2173,6 +2190,7 @@
   }
 
   function initPageBase(container) {
+    if (!container) return;
     // await document.fonts.ready;
     state.ctx = gsap.context(() => {
       initCommon(container);

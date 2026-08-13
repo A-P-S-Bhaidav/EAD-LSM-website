@@ -36,7 +36,8 @@ export default function Footer() {
                 alt="EAD Logo"
                 width={180}
                 height={60}
-                className="h-10 md:h-14 w-auto object-contain"
+                style={{ height: 'auto', width: 'auto' }}
+                className="h-10 md:h-14 object-contain"
                 priority
               />
               <span className="w-px h-8 md:h-10 bg-[#0F172A]/30" />
@@ -45,7 +46,8 @@ export default function Footer() {
                 alt="LSM Logo"
                 width={180}
                 height={60}
-                className="h-10 md:h-14 w-auto object-contain"
+                style={{ height: 'auto', width: 'auto' }}
+                className="h-10 md:h-14 object-contain"
                 priority
               />
             </div>

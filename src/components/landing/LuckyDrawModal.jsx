@@ -37,8 +37,8 @@ export default function LuckyDrawModal({ isOpen, onClose, onGenerate }) {
   const inputClass = "w-full py-3.5 px-4 border-2 border-gray-200 rounded-xl text-[0.95rem] font-montserrat outline-none transition-colors duration-200 text-gray-900 bg-gray-50 focus:border-blue-500 focus:bg-white placeholder-gray-400";
 
   return (
-    <div id="lucky-modal" className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md">
-      <div className="bg-white rounded-2xl p-10 md:p-12 w-full max-w-[420px] relative shadow-[0_25px_60px_rgba(0,0,0,0.2)]">
+    <div id="lucky-modal" className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md px-4">
+      <div className="bg-white rounded-2xl p-6 sm:p-10 md:p-12 w-full max-w-[420px] relative shadow-[0_25px_60px_rgba(0,0,0,0.2)]">
         <button 
           className="absolute top-4 right-5 bg-none border-none text-2xl text-gray-400 cursor-pointer hover:text-gray-700 font-montserrat" 
           onClick={onClose}

@@ -768,19 +768,21 @@ img[alt="Instagram"] {
   }
 }
 
-@media screen and (max-width: 991px) {
-  .hero_bg_img_wrap {
-    display: block !important;
-    width: 80% !important;
-    height: auto !important;
-    aspect-ratio: 1 !important;
+/* hero_bg_img_wrap: always full-screen — do NOT override width/height/aspect-ratio on mobile */
+
+/* Hide custom cursor on touch / pointer-coarse devices */
+@media (pointer: coarse) {
+  #cursor-svg,
+  [data-custom-cursor] {
+    display: none !important;
+  }
+  [data-custom-cursor],
+  [data-custom-cursor] * {
+    cursor: auto !important;
   }
 }
-@media screen and (max-width: 480px) {
-  .hero_bg_img_wrap {
-    width: 90% !important;
-  }
-}
+
+/* Ensure modals are styled by Tailwind max-w rules */
 
 #auth-btn {
   display: inline-block !important;
@@ -1073,4 +1075,57 @@ img[alt="Instagram"] {
 
 .database-container .export-btn:hover {
   background: #45a049;
+}
+
+/* Hamburger Menu CSS Styling & Animations */
+.hamburger-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 16px;
+  cursor: pointer;
+  position: relative;
+  z-index: 60;
+}
+
+.hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #0F172A;
+  border-radius: 9999px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s ease;
+  transform-origin: center;
+}
+
+/* Transform to X when mobile menu is open */
+.menu-open .hamburger-line {
+  background-color: #FFFFFF !important;
+}
+
+.menu-open .hamburger-line-1 {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-open .hamburger-line-2 {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.menu-open .hamburger-line-3 {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav_menu {
+  z-index: 9998 !important;
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+.nav_menu_link_text {
+  color: #FFFFFF !important;
 }

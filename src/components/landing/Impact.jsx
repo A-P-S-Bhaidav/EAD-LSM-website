@@ -18,7 +18,7 @@ export default function Impact() {
   return (
     <section
       id="impact"
-      className="w-full min-h-screen pt-36 pb-16 lg:pt-48 bg-[#F4F7F9] flex flex-col items-center justify-start overflow-hidden font-montserrat"
+      className="w-full min-h-screen pt-20 sm:pt-32 lg:pt-48 pb-16 bg-[#F4F7F9] flex flex-col items-center justify-start overflow-hidden font-montserrat"
     >
       <div className="u-container max-w-[1400px] mx-auto w-full px-4 lg:px-8">
         

@@ -54,7 +54,7 @@ export default function Contact() {
           {/* Subtle Ambient Glow */}
           <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-25 pointer-events-none" style={{ background: 'radial-gradient(circle, #FFFFFF, transparent 70%)', transform: 'translate(25%, -25%)' }} />
 
-          <div className="relative z-20 p-8 sm:p-12 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="relative z-20 p-8 sm:p-12 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             {/* ── LEFT COLUMN: Narrative & Info Grid ── */}
             <div className="lg:col-span-6 flex flex-col justify-between h-full space-y-12 animate-fade-in">

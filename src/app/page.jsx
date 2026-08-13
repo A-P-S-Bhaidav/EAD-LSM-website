@@ -1,4 +1,10 @@
 'use client';
+import { useLayoutEffect, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Flip } from 'gsap/Flip';
+import { Draggable } from 'gsap/Draggable';
+
 import Script from 'next/script';
 import useLandingState from '@/hooks/useLandingState';
 import Loader from '@/components/landing/Loader';
@@ -18,15 +24,48 @@ import LuckyDrawModal from '@/components/landing/LuckyDrawModal';
 import EadLsmPopup from '@/components/landing/EadLsmPopup';
 import QuestionnaireModal from '@/components/landing/QuestionnaireModal';
 import ProjectModal from '@/components/landing/ProjectModal';
-import CustomCursor from '@/components/landing/CustomCursor';
+import ProfileModal from '@/components/landing/ProfileModal';
 import SocialWidget from '@/components/landing/SocialWidget';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+  const [splitTextLoaded, setSplitTextLoaded] = useState(false);
+
+  useLayoutEffect(() => {
+    // Expose gsap globals
+    window.gsap = gsap;
+    window.ScrollTrigger = ScrollTrigger;
+    window.Flip = Flip;
+    window.Draggable = Draggable;
+
+    // Load SplitText dynamically
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js';
+    script.onload = () => {
+      if (window.SplitText) {
+        gsap.registerPlugin(window.SplitText);
+      }
+      setSplitTextLoaded(true);
+    };
+    script.onerror = () => {
+      setSplitTextLoaded(true);
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
   const {
     user, authOpen, setAuthOpen, luckyOpen, setLuckyOpen, hasEAD,
     showDraw, drawText, sendOTP, signInWithGoogle, logoutUser, generateLuckyNumber,
     showPopup, handlePopupSelect, handlePopupClose,
     questionnaireOpen, setQuestionnaireOpen, handleQuestionnaireSubmit,
+    profileOpen, setProfileOpen,
   } = useLandingState();
 
   const handleMenuToggle = () => {
@@ -35,9 +74,11 @@ export default function Home() {
       const isVisible = menu.style.display === 'flex';
       if (window.__closeMobileMenu && isVisible) {
         window.__closeMobileMenu();
-      } else if (window.gsap) {
-        window.gsap.set(menu, { display: 'flex' });
-        window.gsap.to(menu, { clipPath: 'inset(0 0 0% 0)', duration: 0.5, ease: 'power3.out' });
+        document.documentElement.classList.remove('menu-open');
+      } else {
+        gsap.set(menu, { display: 'flex' });
+        gsap.to(menu, { clipPath: 'inset(0 0 0% 0)', duration: 0.5, ease: 'power3.out' });
+        document.documentElement.classList.add('menu-open');
       }
     }
   };
@@ -50,8 +91,9 @@ export default function Home() {
         <div className="page_wrap" data-barba="wrapper">
           <Navbar 
             user={user} 
-            onAuthClick={user ? logoutUser : () => setAuthOpen(true)} 
-            onMenuToggle={handleMenuToggle} 
+            onAuthClick={() => router.push('/register-ead')} 
+            onMenuToggle={handleMenuToggle}
+            onProfileClick={() => router.push('/profile')}
           />
           <MobileMenu onLinkClick={() => window.__closeMobileMenu?.()} />
           <div className="main_wrap" data-barba="container" data-barba-namespace="home">
@@ -73,7 +115,6 @@ export default function Home() {
           <div className="page_transition" data-page-transition="" id="page-transition"></div>
         </div>
       </div>
-      <CustomCursor />
       <ProjectModal />
       <SocialWidget />
 
@@ -98,14 +139,24 @@ export default function Home() {
         sendOTP={sendOTP} 
         signInWithGoogle={signInWithGoogle} 
       />
+
+      {/* Lucky Draw Modal */}
       <LuckyDrawModal 
         isOpen={luckyOpen} 
         onClose={() => setLuckyOpen(false)} 
         onGenerate={generateLuckyNumber} 
       />
+
+      {/* Profile Modal */}
+      <ProfileModal
+        isOpen={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        user={user}
+        onLogout={logoutUser}
+      />
       
       {/* Animations Script */}
-      <Script src="/animations.js" strategy="lazyOnload" />
+      {splitTextLoaded && <Script src="/animations.js" strategy="lazyOnload" />}
     </>
   );
 }

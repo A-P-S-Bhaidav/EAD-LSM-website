@@ -6,6 +6,7 @@ export default function useLandingState() {
   const [user, setUser] = useState(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [luckyOpen, setLuckyOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [hasEAD, setHasEAD] = useState(false);
   const [showDraw, setShowDraw] = useState(false);
   const [drawText, setDrawText] = useState('LUCKY DRAW');
@@ -82,9 +83,14 @@ export default function useLandingState() {
 
   const logoutUser = async () => {
     await supabase.auth.signOut();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('ead_lsm_session');
+      localStorage.removeItem('registered_events');
+    }
     setUser(null);
     setHasEAD(false);
     setShowDraw(false);
+    setDrawText('LUCKY DRAW');
   };
 
   const applyPendingMetadata = async (u) => {
@@ -140,6 +146,30 @@ export default function useLandingState() {
   };
 
   useEffect(() => {
+    // 1. Check custom OTP session
+    if (typeof window !== 'undefined') {
+      const customSession = localStorage.getItem('ead_lsm_session');
+      if (customSession) {
+        try {
+          const parsed = JSON.parse(atob(customSession));
+          const events = JSON.parse(localStorage.getItem('registered_events') || '[]');
+          const customUser = {
+            email: parsed.email,
+            id: parsed.email,
+            user_metadata: {
+              email: parsed.email,
+              registered_events: events
+            },
+            app_metadata: { provider: 'email-otp' }
+          };
+          updateAuthUI(customUser);
+        } catch (e) {
+          localStorage.removeItem('ead_lsm_session');
+        }
+      }
+    }
+
+    // 2. Check Supabase Auth
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         const latest = await applyPendingMetadata(session.user);
@@ -167,5 +197,6 @@ export default function useLandingState() {
     showDraw, drawText, sendOTP, signInWithGoogle, logoutUser, generateLuckyNumber,
     showPopup, handlePopupSelect, handlePopupClose,
     questionnaireOpen, setQuestionnaireOpen, handleQuestionnaireSubmit, questionnaireData,
+    profileOpen, setProfileOpen,
   };
 }

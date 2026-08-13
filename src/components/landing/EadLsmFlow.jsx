@@ -92,8 +92,21 @@ export default function EadLsmFlow() {
             />
           </div>
 
+          {/* Vertical Track (Line) — visible on mobile only */}
+          <div className="block md:hidden absolute left-1/2 -translate-x-1/2 top-[32px] bottom-[160px] w-[3px] bg-[#0F172A]/20 z-10 pointer-events-none">
+            {/* Animated Progress Line */}
+            <motion.div
+              className="w-full bg-[#0F172A]"
+              style={{
+                height: '100%',
+                transformOrigin: 'top',
+                scaleY: scaleX
+              }}
+            />
+          </div>
+
           {/* Steps Columns Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 relative z-20 md:h-[480px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 relative z-20 md:min-h-[480px]">
             {FLOW_STEPS.map((item, idx) => {
               const isEven = idx % 2 === 1; // Step 2 and 4 are even
 

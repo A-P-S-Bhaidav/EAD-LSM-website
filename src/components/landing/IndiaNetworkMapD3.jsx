@@ -15,7 +15,7 @@ import { X, MapPin, Users, Calendar, Search, ZoomIn, ZoomOut, RotateCcw, Briefca
 
 const GEO_URL = '/india-districts.geojson';
 
-const REGIONS = ['All', 'North', 'South', 'East', 'West', 'Central', 'North East'];
+const REGIONS = ['All', 'North', 'South', 'East', 'West'];
 
 // Mercator projection config — centered on India
 const PROJECTION_CONFIG = {
@@ -243,6 +243,7 @@ export default function IndiaNetworkMapD3() {
             zoom={position.zoom}
             center={position.coordinates}
             onMoveEnd={(pos) => setPosition(pos)}
+            filterZoomEvent={(evt) => evt.type !== "wheel"}
           >
             {/* Geographies (India District Outlines) */}
             <Geographies geography={GEO_URL}>

@@ -58,17 +58,17 @@ export default function Hero({ hasEAD, showLuckyDrawBtn, luckyDrawText, onLuckyD
         
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto pointer-events-auto">
-          <button
-            onClick={onRegisterClick}
-            className="w-full sm:w-auto bg-[#0F172A] hover:bg-[#1E293B] text-white border-none py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 cursor-pointer"
-          >
-            Register Now
-          </button>
           <a
-            href="#impact"
-            className="w-full sm:w-auto bg-white hover:bg-slate-50 text-[#0F172A] border border-slate-200 py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 text-center cursor-pointer no-underline"
+            href="/register-ead"
+            className="w-full sm:w-auto min-w-[180px] bg-[#0F172A] hover:bg-[#1E293B] text-white border-none py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 text-center cursor-pointer no-underline"
           >
-            Explore Cities
+            Register EAD
+          </a>
+          <a
+            href="/register-lsm"
+            className="w-full sm:w-auto min-w-[180px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white border-none py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 text-center cursor-pointer no-underline"
+          >
+            Register LSM
           </a>
         </div>
 

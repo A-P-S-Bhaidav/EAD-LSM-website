@@ -1,20 +1,46 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }) {
   const [event, setEvent] = useState('EAD');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [step, setStep] = useState('email');
   const [msg, setMsg] = useState({ text: '', type: '' });
   const [loading, setLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const cooldownRef = useRef(null);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => { if (cooldownRef.current) clearInterval(cooldownRef.current); };
+  }, []);
 
   if (!isOpen) return null;
 
+  const validateEmail = (val) => {
+    if (!val) return 'Email is required.';
+    if (!val.includes('@') || !val.includes('.')) return 'Please enter a valid email address.';
+    return '';
+  };
+
+  const handleEmailBlur = () => {
+    setEmailError(validateEmail(email));
+  };
+
+  const startResendCooldown = () => {
+    setResendCooldown(60);
+    cooldownRef.current = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) { clearInterval(cooldownRef.current); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
   const handleSendOTP = async () => {
-    if (!email || !email.includes('@')) {
-      setMsg({ text: 'Please enter a valid email.', type: 'error' });
-      return;
-    }
+    const err = validateEmail(email);
+    if (err) { setEmailError(err); return; }
     setLoading(true);
     setMsg({ text: '', type: '' });
     try {
@@ -24,9 +50,29 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
         setMsg({ text: res.error.message, type: 'error' });
       } else {
         setStep('otp');
+        startResendCooldown();
       }
     } catch (err) {
       setMsg({ text: 'An unexpected error occurred.', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return;
+    setLoading(true);
+    setMsg({ text: '', type: '' });
+    try {
+      const res = await sendOTP(email, [event]);
+      if (res.error) {
+        setMsg({ text: res.error.message, type: 'error' });
+      } else {
+        setMsg({ text: 'Magic link resent!', type: 'success' });
+        startResendCooldown();
+      }
+    } catch {
+      setMsg({ text: 'Failed to resend. Try again.', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -36,19 +82,22 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
   const inputRadioClass = "w-[18px] h-[18px] cursor-pointer accent-blue-600";
 
   return (
-    <div id="auth-modal" className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md">
-      <div className="bg-white rounded-2xl p-10 md:p-12 w-full max-w-[420px] relative shadow-[0_25px_60px_rgba(0,0,0,0.2)]">
+    <div id="auth-modal" className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-md px-4">
+      <div className="bg-white rounded-2xl p-6 sm:p-10 md:p-12 w-full max-w-[420px] relative shadow-[0_25px_60px_rgba(0,0,0,0.2)]">
         <button 
           className="absolute top-4 right-5 bg-none border-none text-2xl text-gray-400 cursor-pointer hover:text-gray-700 font-montserrat" 
           onClick={onClose}
         >
           &times;
         </button>
+
         {step === 'email' ? (
           <div>
-            <h2 className="font-montserrat text-[1.3rem] font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-widest">Register / Login</h2>
-            <p className="font-montserrat text-gray-500 text-[0.85rem] m-0 mb-7">Select your event and continue</p>
-            <div className="mb-6 flex gap-6 justify-center bg-gray-50 p-3.5 rounded-xl border border-gray-200">
+            <h2 className="font-montserrat text-[1.1rem] sm:text-[1.3rem] font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-widest">Register / Login</h2>
+            <p className="font-montserrat text-gray-500 text-[0.85rem] m-0 mb-5">Select your event and continue</p>
+
+            {/* Event selector */}
+            <div className="mb-5 flex gap-6 justify-center bg-gray-50 p-3.5 rounded-xl border border-gray-200">
               {['EAD', 'LSM'].map((evt) => (
                 <label key={evt} className={labelClass}>
                   <input 
@@ -62,32 +111,44 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
               ))}
             </div>
 
-            {/* Note for LSM */}
+            {/* LSM note */}
             {event === 'LSM' && (
               <div className="mb-4 p-3 bg-purple-50 border border-purple-100 rounded-xl">
                 <p className="text-[0.78rem] text-purple-700 font-medium leading-relaxed">
-                  📋 Registering for LSM automatically includes you in the pitching process.
+                  Registering for LSM automatically includes you in the pitching process.
                 </p>
               </div>
             )}
 
-            <input 
-              type="email" 
-              placeholder="Enter your email address" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              suppressHydrationWarning
-              className="w-full py-3.5 px-4 border-2 border-gray-200 rounded-xl text-[0.95rem] font-montserrat outline-none transition-colors duration-200 text-gray-900 bg-gray-50 focus:border-blue-500 focus:bg-white placeholder-gray-400"
-            />
+            {/* Email input with validation */}
+            <div className="mb-0">
+              <input 
+                type="email" 
+                placeholder="Enter your email address" 
+                value={email} 
+                onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(''); }} 
+                onBlur={handleEmailBlur}
+                suppressHydrationWarning
+                className={`w-full py-3.5 px-4 border-2 rounded-xl text-[0.95rem] font-montserrat outline-none transition-colors duration-200 text-gray-900 bg-gray-50 focus:bg-white placeholder-gray-400 ${
+                  emailError ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-500'
+                }`}
+              />
+              {emailError && (
+                <p className="text-red-500 text-[0.75rem] mt-1.5 font-medium">{emailError}</p>
+              )}
+            </div>
+
             <button 
               className="w-full p-3.5 bg-gray-900 text-white border-none rounded-xl font-montserrat font-bold text-[0.85rem] tracking-wider uppercase cursor-pointer mt-3 transition-colors duration-200 hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed" 
               disabled={loading} 
               onClick={handleSendOTP}
               suppressHydrationWarning
             >
-              {loading ? 'Sending...' : 'Send Magic Link ➔'}
+              {loading ? 'Sending…' : 'Send Magic Link ➔'}
             </button>
-            <div className="flex items-center my-6 gap-3 text-gray-400 text-[0.75rem] font-montserrat uppercase tracking-[0.15em] before:content-[''] before:flex-1 before:h-[1px] before:bg-gray-200 after:content-[''] after:flex-1 after:h-[1px] after:bg-gray-200">or</div>
+
+            <div className="flex items-center my-5 gap-3 text-gray-400 text-[0.75rem] font-montserrat uppercase tracking-[0.15em] before:content-[''] before:flex-1 before:h-[1px] before:bg-gray-200 after:content-[''] after:flex-1 after:h-[1px] after:bg-gray-200">or</div>
+
             <button 
               className="w-full p-[13px] bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-montserrat font-semibold text-[0.85rem] cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-200 hover:border-gray-400 hover:bg-gray-50" 
               onClick={() => signInWithGoogle([event])}
@@ -101,21 +162,51 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
               </svg>
               Continue with Google
             </button>
+
             <div className={`font-montserrat text-[0.8rem] mt-3 text-center min-h-[20px] ${msg.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>{msg.text}</div>
           </div>
         ) : (
-          <div className="text-center py-5">
-            <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto mb-4 block">
-              <path fill="#16a34a" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-            <h2 className="font-montserrat text-[1.3rem] font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-widest">Magic Link Sent!</h2>
-            <p className="font-montserrat text-gray-500 text-[0.95rem] m-0 mb-0">Please check your email and tap the link to complete registration/login.</p>
+          <div className="text-center py-4">
+            {/* Animated envelope icon */}
+            <div className="relative w-16 h-16 mx-auto mb-5">
+              <div className="absolute inset-0 rounded-full bg-emerald-100 animate-ping opacity-40" />
+              <div className="relative w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+
+            <h2 className="font-montserrat text-[1.1rem] sm:text-[1.3rem] font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-widest">Check Your Email</h2>
+            <p className="font-montserrat text-gray-500 text-[0.9rem] m-0 mb-1">We sent a magic link to</p>
+            <p className="font-montserrat font-bold text-gray-900 text-[0.95rem] mb-5 break-all">{email}</p>
+            <p className="font-montserrat text-gray-400 text-[0.8rem] mb-6 leading-relaxed">Tap the link in your inbox to complete registration / login. Check your spam folder if you don&apos;t see it.</p>
+
+            {/* Resend button */}
+            <button
+              onClick={handleResend}
+              disabled={resendCooldown > 0 || loading}
+              className="w-full p-[11px] text-[0.8rem] rounded-xl font-montserrat font-semibold transition-all duration-200 border-2 cursor-pointer mb-3 disabled:cursor-default"
+              style={{
+                background: resendCooldown > 0 ? '#f3f4f6' : '#ffffff',
+                color: resendCooldown > 0 ? '#9ca3af' : '#374151',
+                borderColor: resendCooldown > 0 ? '#e5e7eb' : '#d1d5db',
+              }}
+              suppressHydrationWarning
+            >
+              {loading ? 'Sending…' : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Magic Link'}
+            </button>
+
             <button 
-              className="w-full p-[13px] bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-montserrat font-semibold text-[0.85rem] cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-200 hover:border-gray-400 hover:bg-gray-50 mt-6" 
+              className="w-full p-[13px] bg-gray-900 text-white border-none rounded-xl font-montserrat font-semibold text-[0.85rem] cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-200 hover:bg-gray-700 mt-1" 
               onClick={onClose}
             >
               Close Window
             </button>
+
+            {msg.text && (
+              <div className={`font-montserrat text-[0.8rem] mt-3 text-center ${msg.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>{msg.text}</div>
+            )}
           </div>
         )}
       </div>
