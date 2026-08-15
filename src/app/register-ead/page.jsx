@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { queryDatabase } from '@/lib/db-client';
 import useLandingState from '@/hooks/useLandingState';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
@@ -125,41 +125,37 @@ export default function RegisterEadPage() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        // Successful verification -> Perform registrations
-        const generatedNum = Math.floor(1000 + Math.random() * 9000);
-        setLuckyNumber(generatedNum);
+        // 1. Save session locally first
+        localStorage.setItem('ead_lsm_session', data.token);
+        localStorage.setItem('registered_events', JSON.stringify(['EAD']));
 
         const emailClean = form.email.trim().toLowerCase();
 
-        // 1. Write user registration (EAD)
-        await supabase
-          .from('user_registrations')
-          .upsert({ email: emailClean, registered_events: 'EAD' });
+        // 2. Write user registration (EAD)
+        await queryDatabase('upsertUserRegistration', {
+          email: emailClean,
+          registeredEvents: 'EAD',
+        });
 
-        // 2. Generate lucky draw record
-        await supabase
-          .from('lucky_draws')
-          .insert({
-            name: form.name.trim(),
-            email: emailClean,
-            event_name: form.location.trim(),
-            lucky_number: generatedNum,
-          });
+        // 3. Generate lucky draw record (guaranteed unique by server)
+        const drawResult = await queryDatabase('insertLuckyDraw', {
+          name: form.name.trim(),
+          email: emailClean,
+          eventName: form.location.trim(),
+        });
 
-        // 3. Write responses to questionnaire
-        await supabase
-          .from('questionnaire_responses')
-          .insert({
-            name: form.name.trim(),
-            email: emailClean,
-            college: form.college.trim(),
-            interest: 'EAD',
-            experience: 'None',
-          });
+        if (drawResult.data && drawResult.data.length > 0) {
+          setLuckyNumber(drawResult.data[0].lucky_number);
+        }
 
-        // 4. Save session locally
-        localStorage.setItem('ead_lsm_session', data.token);
-        localStorage.setItem('registered_events', JSON.stringify(['EAD']));
+        // 4. Write responses to questionnaire
+        await queryDatabase('insertQuestionnaire', {
+          name: form.name.trim(),
+          email: emailClean,
+          college: form.college.trim(),
+          interest: 'EAD',
+          experience: 'None',
+        });
 
         setStep('success');
       } else {

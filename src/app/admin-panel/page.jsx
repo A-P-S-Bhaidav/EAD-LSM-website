@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { queryDatabase } from '@/lib/db-client';
 import AdminLogin from '@/components/admin/AdminLogin';
 import AdminDashboard from '@/components/admin/AdminDashboard';
 import WinnersModal from '@/components/admin/WinnersModal';
@@ -14,12 +14,10 @@ export default function AdminPage() {
   const fetchEntries = async (ead) => {
     setLoading(true);
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-    const { data, error } = await supabase
-      .from('lucky_draws')
-      .select('*')
-      .ilike('event_name', ead)
-      .gte('created_at', oneDayAgo)
-      .order('created_at', { ascending: false });
+    const { data, error } = await queryDatabase('queryLuckyDrawsRecent', {
+      eventName: ead,
+      oneDayAgo
+    });
 
     if (error) {
       console.error(error);

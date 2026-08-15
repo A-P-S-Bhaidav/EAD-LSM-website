@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { sql } from '@/lib/db';
 import { saveCachedOtp } from '@/lib/otp-store';
 
 export async function POST(req) {
@@ -9,23 +9,36 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
+    const emailClean = email.trim().toLowerCase();
+
+    // Check if email is already registered
+    const existing = await sql`
+      SELECT email FROM user_registrations
+      WHERE email = ${emailClean}
+    `;
+
+    if (existing && existing.length > 0) {
+      return NextResponse.json({ error: 'This email is already registered. Please log in instead.' }, { status: 400 });
+    }
+
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
     // Store in filesystem-based fallback cache
-    saveCachedOtp(email, code);
+    saveCachedOtp(emailClean, code);
 
-    // Store in public.otps table
-    const { error: dbError } = await supabase
-      .from('otps')
-      .insert({ email, code, expires_at: expiresAt });
-
-    if (dbError) {
-      console.warn('DB insert to public.otps failed, using in-memory log fallback:', dbError.message);
+    // Store in Neon Postgres otps table
+    try {
+      await sql`
+        INSERT INTO otps (email, code, expires_at)
+        VALUES (${emailClean}, ${code}, ${expiresAt})
+      `;
+    } catch (dbError) {
+      console.warn('DB insert to otps failed, using in-memory log fallback:', dbError.message);
     }
 
     // Always log OTP to server console for local testing/fallback
-    console.log(`\n========================================\n[OTP VERIFICATION]\nEmail: ${email}\nCode: ${code}\n========================================\n`);
+    console.log(`\n========================================\n[OTP VERIFICATION]\nEmail: ${emailClean}\nCode: ${code}\n========================================\n`);
 
     // Send via Resend if API key is present
     const resendApiKey = process.env.RESEND_API_KEY;
@@ -41,7 +54,7 @@ export async function POST(req) {
           },
           body: JSON.stringify({
             from: `E-Cell IIT Kharagpur <${fromEmail}>`,
-            to: [email],
+            to: [emailClean],
             subject: `${code} is your EAD-LSM Verification Code`,
             html: `<p>Your verification code is <strong>${code}</strong>. It will expire in 10 minutes.</p>`
           })

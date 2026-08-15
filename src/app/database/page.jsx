@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Script from 'next/script';
-import { supabase } from '@/lib/supabase';
+import { queryDatabase } from '@/lib/db-client';
 import DatabaseLogin from '@/components/database/DatabaseLogin';
 import EadTab from '@/components/database/EadTab';
 import LsmTab from '@/components/database/LsmTab';
@@ -28,14 +28,14 @@ export default function DatabasePage() {
   const fetchEadData = async (loc) => {
     if (!loc) { alert("Please enter a location to filter."); return; }
     setLoading(true);
-    const { data, error } = await supabase.from('lucky_draws').select('*').ilike('event_name', loc).order('created_at', { ascending: false });
+    const { data, error } = await queryDatabase('queryLuckyDrawsByLocation', { eventName: loc });
     if (error) { alert('Error fetching EAD entries.'); } else { setEadEntries(data || []); }
     setLoading(false);
   };
 
   const fetchLsmData = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('user_registrations').select('email').ilike('registered_events', '%LSM%');
+    const { data, error } = await queryDatabase('queryLsmUserRegistrations');
     if (error) { alert('Error fetching LSM entries.'); } else { setLsmEntries(data || []); }
     setLoading(false);
   };

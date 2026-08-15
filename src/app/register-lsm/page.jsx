@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { queryDatabase } from '@/lib/db-client';
 import useLandingState from '@/hooks/useLandingState';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
@@ -217,15 +217,19 @@ export default function RegisterLsmPage() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        // Successful verification -> Perform registrations
+        // 1. Save session locally first
+        localStorage.setItem('ead_lsm_session', data.token);
+        localStorage.setItem('registered_events', JSON.stringify(['LSM', 'Pitching']));
+
         const emailClean = form.email.trim().toLowerCase();
 
-        // 1. Write user registration (LSM + Pitching automatic check)
-        await supabase
-          .from('user_registrations')
-          .upsert({ email: emailClean, registered_events: 'LSM,Pitching' });
+        // 2. Write user registration (LSM + Pitching automatic check)
+        await queryDatabase('upsertUserRegistration', {
+          email: emailClean,
+          registeredEvents: 'LSM,Pitching',
+        });
 
-        // 2. Write responses to questionnaire (serialize detailed startup responses in the experience field)
+        // 3. Write responses to questionnaire (serialize detailed startup responses in the experience field)
         const experienceSummary = `Startup: ${form.startupName.trim()}
 Founder 1: ${form.name.trim()} (Contact: ${form.phone.trim()}, Email: ${emailClean})
 Founder 2: ${form.founder2Name.trim() || 'N/A'} (Contact: ${form.founder2Phone.trim() || 'N/A'}, Email: ${form.founder2Email.trim() || 'N/A'})
@@ -237,19 +241,13 @@ Domain: ${form.startupDomain}
 Stage: ${form.startupStage}
 Pitch Deck Link: ${form.pitchDeckUrl.trim()}`;
 
-        await supabase
-          .from('questionnaire_responses')
-          .insert({
-            name: form.name.trim(),
-            email: emailClean,
-            college: form.college.trim(),
-            interest: 'LSM',
-            experience: experienceSummary,
-          });
-
-        // 3. Save session locally
-        localStorage.setItem('ead_lsm_session', data.token);
-        localStorage.setItem('registered_events', JSON.stringify(['LSM', 'Pitching']));
+        await queryDatabase('insertQuestionnaire', {
+          name: form.name.trim(),
+          email: emailClean,
+          college: form.college.trim(),
+          interest: 'LSM',
+          experience: experienceSummary,
+        });
 
         setStep('success');
       } else {

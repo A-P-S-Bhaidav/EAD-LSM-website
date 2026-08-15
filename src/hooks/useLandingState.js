@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { queryDatabase } from '@/lib/db-client';
 
 export default function useLandingState() {
   const router = useRouter();
@@ -51,15 +52,14 @@ export default function useLandingState() {
   const handleQuestionnaireSubmit = async (data) => {
     setQuestionnaireData(data);
     setQuestionnaireOpen(false);
-    // Store questionnaire data in Supabase
+    // Store questionnaire data in Neon Postgres
     try {
-      await supabase.from('questionnaire_responses').insert({
+      await queryDatabase('insertQuestionnaire', {
         name: data.name,
         email: data.email,
         college: data.college,
         interest: data.interest,
         experience: data.experience,
-        timestamp: new Date().toISOString(),
       });
     } catch (e) {
       console.error('Questionnaire save error:', e);
@@ -116,9 +116,10 @@ export default function useLandingState() {
       
       // Also register user for the events in user_registrations table
       const emailClean = email.trim().toLowerCase();
-      await supabase
-        .from('user_registrations')
-        .upsert({ email: emailClean, registered_events: events.join(',') });
+      await queryDatabase('upsertUserRegistration', {
+        email: emailClean,
+        registeredEvents: events.join(','),
+      });
       
       // Trigger update of user UI state
       const customUser = {
@@ -177,8 +178,7 @@ export default function useLandingState() {
   };
 
   const check24HourLimit = async (email) => {
-    const { data } = await supabase.from('lucky_draws').select('created_at, lucky_number')
-      .eq('email', email).order('created_at', { ascending: false }).limit(1);
+    const { data } = await queryDatabase('getLatestLuckyDraw', { email });
     if (data && data.length > 0) {
       const lastDraw = new Date(data[0].created_at).getTime();
       if (Date.now() - lastDraw < 24 * 60 * 60 * 1000) {
@@ -194,7 +194,7 @@ export default function useLandingState() {
       const hasEadEvent = events.includes('EAD');
       setHasEAD(hasEadEvent);
       if (u.email) {
-        supabase.from('user_registrations').upsert({ email: u.email, registered_events: events.join(',') })
+        queryDatabase('upsertUserRegistration', { email: u.email, registeredEvents: events.join(',') })
           .then(() => {}).catch(e => console.error(e));
       }
       if (hasEadEvent) {
@@ -206,10 +206,13 @@ export default function useLandingState() {
 
   const generateLuckyNumber = async (name, location) => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
-    const { error } = await supabase.from('lucky_draws').insert({
-      name, email: user.email, event_name: location, lucky_number: randomNum
+    const { error } = await queryDatabase('insertLuckyDraw', {
+      name,
+      email: user.email,
+      eventName: location,
+      luckyNumber: randomNum,
     });
-    if (error) return { error: error.message };
+    if (error) return { error };
     setDrawText('LUCKY NUMBER: ' + randomNum);
     return { number: randomNum };
   };
@@ -219,28 +222,45 @@ export default function useLandingState() {
     if (typeof window !== 'undefined') {
       const customSession = localStorage.getItem('ead_lsm_session');
       if (customSession) {
-        try {
-          const parsed = JSON.parse(atob(customSession));
-          const events = JSON.parse(localStorage.getItem('registered_events') || '[]');
-          const customUser = {
-            email: parsed.email,
-            id: parsed.email,
-            user_metadata: {
-              email: parsed.email,
-              registered_events: events
-            },
-            app_metadata: { provider: 'email-otp' }
-          };
-          updateAuthUI(customUser);
-        } catch (e) {
+        if (!customSession.includes('.')) {
           localStorage.removeItem('ead_lsm_session');
+        } else {
+          try {
+            const payloadPart = customSession.split('.')[0];
+            const parsed = JSON.parse(atob(payloadPart));
+            const events = JSON.parse(localStorage.getItem('registered_events') || '[]');
+            const customUser = {
+              email: parsed.email,
+              id: parsed.email,
+              user_metadata: {
+                email: parsed.email,
+                registered_events: events
+              },
+              app_metadata: { provider: 'email-otp' }
+            };
+            updateAuthUI(customUser);
+          } catch (e) {
+            localStorage.removeItem('ead_lsm_session');
+          }
         }
       }
     }
-
     // 2. Check Supabase Auth
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
+        try {
+          const res = await fetch('/api/auth/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: session.access_token }),
+          });
+          const resData = await res.json();
+          if (res.ok && resData.success) {
+            localStorage.setItem('ead_lsm_session', resData.token);
+          }
+        } catch (e) {
+          console.error('Supabase session exchange error:', e);
+        }
         const latest = await applyPendingMetadata(session.user);
         updateAuthUI(latest);
       }
@@ -248,13 +268,29 @@ export default function useLandingState() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
+        try {
+          const res = await fetch('/api/auth/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: session.access_token }),
+          });
+          const resData = await res.json();
+          if (res.ok && resData.success) {
+            localStorage.setItem('ead_lsm_session', resData.token);
+          }
+        } catch (e) {
+          console.error('Supabase session exchange error:', e);
+        }
         const latest = await applyPendingMetadata(session.user);
         updateAuthUI(latest);
       } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-        setHasEAD(false);
-        setShowDraw(false);
-        setDrawText('LUCKY DRAW');
+        const customSession = typeof window !== 'undefined' ? localStorage.getItem('ead_lsm_session') : null;
+        if (!customSession) {
+          setUser(null);
+          setHasEAD(false);
+          setShowDraw(false);
+          setDrawText('LUCKY DRAW');
+        }
       }
     });
 

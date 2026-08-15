@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
+import { sql } from '@/lib/db';
 import { supabase } from '@/lib/supabase';
+import { signToken } from '@/lib/auth-tokens';
 import { getCachedOtp, deleteCachedOtp } from '@/lib/otp-store';
 
 export async function POST(req) {
@@ -24,14 +26,14 @@ export async function POST(req) {
       }
     }
 
-    // 2. If memory verification didn't succeed, fallback to querying Supabase
+    // 2. If memory verification didn't succeed, fallback to querying Neon Postgres
     if (!isCodeValid) {
-      const { data, error } = await supabase
-        .from('otps')
-        .select('*')
-        .eq('email', emailClean)
-        .order('created_at', { ascending: false })
-        .limit(1);
+      const data = await sql`
+        SELECT * FROM otps
+        WHERE email = ${emailClean}
+        ORDER BY created_at DESC
+        LIMIT 1
+      `;
 
       if (data && data.length > 0) {
         const latestOtp = data[0];
@@ -39,12 +41,10 @@ export async function POST(req) {
         if (!isCodeExpired && latestOtp.code === code.trim()) {
           isCodeValid = true;
           // Clean up database OTP asynchronously
-          supabase
-            .from('otps')
-            .delete()
-            .eq('email', emailClean)
-            .then(() => {})
-            .catch(() => {});
+          sql`
+            DELETE FROM otps
+            WHERE email = ${emailClean}
+          `.catch(console.error);
         }
       }
     }
@@ -146,8 +146,8 @@ export async function POST(req) {
       }
     }
 
-    // Create session token (keep it simple: base64 encoded JSON)
-    const sessionToken = btoa(JSON.stringify({ email, verified: true, time: Date.now() }));
+    // Create signed session token using HMAC SHA-256
+    const sessionToken = signToken({ email: emailClean, verified: true, time: Date.now(), role: 'user' });
 
     return NextResponse.json({ success: true, token: sessionToken });
   } catch (err) {

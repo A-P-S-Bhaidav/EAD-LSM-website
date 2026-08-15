@@ -7,15 +7,23 @@ export default function AdminLogin({ onLogin }) {
   const [ead, setEad] = useState('');
   const [error, setError] = useState(false);
 
-  const handleSubmit = () => {
-    if (
-      name.toLowerCase() === 'anant pratap singh bhaidav' &&
-      email.toLowerCase() === 'anantbhaidav@gmail.com' &&
-      ead.toLowerCase() === 'delhi'
-    ) {
-      onLogin({ name, email, ead });
+  const handleSubmit = async () => {
+    try {
       setError(false);
-    } else {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, ead }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        sessionStorage.setItem('ead_lsm_session', data.token);
+        onLogin({ name, email, ead });
+      } else {
+        setError(true);
+      }
+    } catch (err) {
+      console.error(err);
       setError(true);
     }
   };

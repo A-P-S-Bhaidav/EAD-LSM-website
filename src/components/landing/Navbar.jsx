@@ -85,24 +85,28 @@ export default function Navbar({ user, onAuthClick, onMenuToggle, onProfileClick
           {/*  Right actions  */}
           <div className="flex items-center gap-3 flex-shrink-0 z-30 relative">
             {user ? (
-              /* Avatar button — shown when logged in */
-              <button
-                id="auth-btn"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  if (onProfileClick) onProfileClick();
-                }}
-                suppressHydrationWarning
-                title={displayName || user.email}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black text-white shadow-md transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer relative overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #2563eb, #7DA6A9)' }}
-              >
-                {initials}
-                {/* Subtle glow ring */}
-                <span className="absolute inset-0 rounded-xl ring-2 ring-white/30 pointer-events-none" />
-              </button>
+              <>
+                <a
+                  href="/profile"
+                  data-barba-prevent
+                  className="bg-white border border-[#2563EB]/40 hover:border-[#2563EB] text-[#2563EB] hover:bg-blue-50/50 py-2.5 px-5 font-montserrat font-extrabold text-[0.825rem] tracking-wider cursor-pointer uppercase rounded-lg shadow-sm transition-all duration-300 ease-in-out relative z-30 pointer-events-auto hover:scale-105 active:scale-95 no-underline flex items-center justify-center"
+                >
+                  Profile
+                </a>
+                <a
+                  id="profile-avatar"
+                  href="/profile"
+                  data-barba-prevent
+                  suppressHydrationWarning
+                  title={displayName || user.email}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black text-white shadow-md transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer relative overflow-hidden no-underline"
+                  style={{ background: 'linear-gradient(135deg, #2563eb, #7DA6A9)' }}
+                >
+                  {initials}
+                  {/* Subtle glow ring */}
+                  <span className="absolute inset-0 rounded-xl ring-2 ring-white/30 pointer-events-none" />
+                </a>
+              </>
             ) : (
               /* Auth buttons — shown when logged out */
               <>
