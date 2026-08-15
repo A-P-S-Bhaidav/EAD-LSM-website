@@ -1,10 +1,12 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 
-export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }) {
+export default function AuthModal({ isOpen, onClose, sendOTP, verifyOTP, signInWithGoogle }) {
   const [event, setEvent] = useState('EAD');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpError, setOtpError] = useState('');
   const [step, setStep] = useState('email');
   const [msg, setMsg] = useState({ text: '', type: '' });
   const [loading, setLoading] = useState(false);
@@ -59,6 +61,38 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
     }
   };
 
+  const handleVerifyOTP = async (e) => {
+    if (e) e.preventDefault();
+    if (!otp.trim() || otp.length < 6) {
+      setOtpError('Enter a valid 6-digit code');
+      return;
+    }
+    setLoading(true);
+    setOtpError('');
+    setMsg({ text: '', type: '' });
+    try {
+      const res = await verifyOTP(email, otp);
+      if (res.error) {
+        setOtpError(res.error.message);
+      } else {
+        setMsg({ text: 'Successfully authenticated!', type: 'success' });
+        // Close modal on success
+        setTimeout(() => {
+          onClose();
+          // Reset state
+          setStep('email');
+          setEmail('');
+          setOtp('');
+          setMsg({ text: '', type: '' });
+        }, 1000);
+      }
+    } catch (err) {
+      setOtpError('Verification failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleResend = async () => {
     if (resendCooldown > 0) return;
     setLoading(true);
@@ -68,7 +102,7 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
       if (res.error) {
         setMsg({ text: res.error.message, type: 'error' });
       } else {
-        setMsg({ text: 'Magic link resent!', type: 'success' });
+        setMsg({ text: 'Verification code resent!', type: 'success' });
         startResendCooldown();
       }
     } catch {
@@ -96,7 +130,6 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
             <h2 className="font-montserrat text-[1.1rem] sm:text-[1.3rem] font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-widest">Register / Login</h2>
             <p className="font-montserrat text-gray-500 text-[0.85rem] m-0 mb-5">Select your event and continue</p>
 
-            {/* Event selector */}
             <div className="mb-5 flex gap-6 justify-center bg-gray-50 p-3.5 rounded-xl border border-gray-200">
               {['EAD', 'LSM'].map((evt) => (
                 <label key={evt} className={labelClass}>
@@ -111,7 +144,6 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
               ))}
             </div>
 
-            {/* LSM note */}
             {event === 'LSM' && (
               <div className="mb-4 p-3 bg-purple-50 border border-purple-100 rounded-xl">
                 <p className="text-[0.78rem] text-purple-700 font-medium leading-relaxed">
@@ -120,7 +152,6 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
               </div>
             )}
 
-            {/* Email input with validation */}
             <div className="mb-0">
               <input 
                 type="email" 
@@ -130,7 +161,7 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
                 onBlur={handleEmailBlur}
                 suppressHydrationWarning
                 className={`w-full py-3.5 px-4 border-2 rounded-xl text-[0.95rem] font-montserrat outline-none transition-colors duration-200 text-gray-900 bg-gray-50 focus:bg-white placeholder-gray-400 ${
-                  emailError ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-500'
+                  emailError ? 'border-red-400' : 'border-gray-200'
                 }`}
               />
               {emailError && (
@@ -144,7 +175,7 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
               onClick={handleSendOTP}
               suppressHydrationWarning
             >
-              {loading ? 'Sending…' : 'Send Magic Link ➔'}
+              {loading ? 'Sending…' : 'Send OTP ➔'}
             </button>
 
             <div className="flex items-center my-5 gap-3 text-gray-400 text-[0.75rem] font-montserrat uppercase tracking-[0.15em] before:content-[''] before:flex-1 before:h-[1px] before:bg-gray-200 after:content-[''] after:flex-1 after:h-[1px] after:bg-gray-200">or</div>
@@ -167,42 +198,67 @@ export default function AuthModal({ isOpen, onClose, sendOTP, signInWithGoogle }
           </div>
         ) : (
           <div className="text-center py-4">
-            {/* Animated envelope icon */}
             <div className="relative w-16 h-16 mx-auto mb-5">
-              <div className="absolute inset-0 rounded-full bg-emerald-100 animate-ping opacity-40" />
-              <div className="relative w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              <div className="absolute inset-0 rounded-full bg-purple-100 animate-ping opacity-40" />
+              <div className="relative w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
             </div>
 
-            <h2 className="font-montserrat text-[1.1rem] sm:text-[1.3rem] font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-widest">Check Your Email</h2>
-            <p className="font-montserrat text-gray-500 text-[0.9rem] m-0 mb-1">We sent a magic link to</p>
-            <p className="font-montserrat font-bold text-gray-900 text-[0.95rem] mb-5 break-all">{email}</p>
-            <p className="font-montserrat text-gray-400 text-[0.8rem] mb-6 leading-relaxed">Tap the link in your inbox to complete registration / login. Check your spam folder if you don&apos;t see it.</p>
+            <h2 className="font-montserrat text-[1.1rem] sm:text-[1.3rem] font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-widest">Verify Email</h2>
+            <p className="font-montserrat text-gray-500 text-[0.85rem] m-0 mb-1">Enter the 6-digit code sent to</p>
+            <p className="font-montserrat font-bold text-gray-900 text-[0.9rem] mb-5 break-all">{email}</p>
 
-            {/* Resend button */}
-            <button
-              onClick={handleResend}
-              disabled={resendCooldown > 0 || loading}
-              className="w-full p-[11px] text-[0.8rem] rounded-xl font-montserrat font-semibold transition-all duration-200 border-2 cursor-pointer mb-3 disabled:cursor-default"
-              style={{
-                background: resendCooldown > 0 ? '#f3f4f6' : '#ffffff',
-                color: resendCooldown > 0 ? '#9ca3af' : '#374151',
-                borderColor: resendCooldown > 0 ? '#e5e7eb' : '#d1d5db',
-              }}
-              suppressHydrationWarning
-            >
-              {loading ? 'Sending…' : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Magic Link'}
-            </button>
+            <form onSubmit={handleVerifyOTP} className="flex flex-col gap-3.5 mb-4">
+              <input
+                type="text"
+                placeholder="6-digit code"
+                maxLength={6}
+                value={otp}
+                onChange={(e) => { setOtp(e.target.value); setOtpError(''); }}
+                suppressHydrationWarning
+                className={`w-full py-3.5 px-4 border-2 rounded-xl text-center text-lg font-mono font-bold tracking-[0.25em] outline-none bg-gray-50 focus:bg-white transition-colors duration-200 text-gray-900 placeholder-gray-400 ${
+                  otpError ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-500'
+                }`}
+              />
+              {otpError && (
+                <p className="text-red-500 text-[0.75rem] font-medium text-left px-1">{otpError}</p>
+              )}
 
-            <button 
-              className="w-full p-[13px] bg-gray-900 text-white border-none rounded-xl font-montserrat font-semibold text-[0.85rem] cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-200 hover:bg-gray-700 mt-1" 
-              onClick={onClose}
-            >
-              Close Window
-            </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full p-3.5 bg-gray-900 text-white border-none rounded-xl font-montserrat font-bold text-[0.85rem] tracking-wider uppercase cursor-pointer transition-colors duration-200 hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                suppressHydrationWarning
+              >
+                {loading ? 'Verifying…' : 'Verify & Login ➔'}
+              </button>
+            </form>
+
+            <div className="flex flex-col gap-2 mt-4">
+              <button
+                onClick={handleResend}
+                disabled={resendCooldown > 0 || loading}
+                className="w-full p-[11px] text-[0.8rem] rounded-xl font-montserrat font-semibold transition-all duration-200 border-2 cursor-pointer disabled:cursor-default"
+                style={{
+                  background: resendCooldown > 0 ? '#f3f4f6' : '#ffffff',
+                  color: resendCooldown > 0 ? '#9ca3af' : '#374151',
+                  borderColor: resendCooldown > 0 ? '#e5e7eb' : '#d1d5db',
+                }}
+                suppressHydrationWarning
+              >
+                {loading ? 'Sending…' : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Code'}
+              </button>
+
+              <button 
+                className="w-full p-[13px] bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-montserrat font-semibold text-[0.85rem] cursor-pointer flex items-center justify-center transition-all duration-200 hover:border-gray-400 hover:bg-gray-50" 
+                onClick={onClose}
+              >
+                Close Window
+              </button>
+            </div>
 
             {msg.text && (
               <div className={`font-montserrat text-[0.8rem] mt-3 text-center ${msg.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>{msg.text}</div>

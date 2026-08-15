@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { saveCachedOtp } from '@/lib/otp-store';
 
 export async function POST(req) {
   try {
@@ -10,6 +11,9 @@ export async function POST(req) {
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+    // Store in filesystem-based fallback cache
+    saveCachedOtp(email, code);
 
     // Store in public.otps table
     const { error: dbError } = await supabase

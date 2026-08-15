@@ -62,7 +62,7 @@ export default function Home() {
 
   const {
     user, authOpen, setAuthOpen, luckyOpen, setLuckyOpen, hasEAD,
-    showDraw, drawText, sendOTP, signInWithGoogle, logoutUser, generateLuckyNumber,
+    showDraw, drawText, sendOTP, verifyOTP, signInWithGoogle, logoutUser, generateLuckyNumber,
     showPopup, handlePopupSelect, handlePopupClose,
     questionnaireOpen, setQuestionnaireOpen, handleQuestionnaireSubmit,
     profileOpen, setProfileOpen,
@@ -128,6 +128,7 @@ export default function Home() {
         isOpen={authOpen} 
         onClose={() => setAuthOpen(false)} 
         sendOTP={sendOTP} 
+        verifyOTP={verifyOTP} 
         signInWithGoogle={signInWithGoogle} 
       />
 

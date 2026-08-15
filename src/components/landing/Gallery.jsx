@@ -12,7 +12,7 @@ export default function Gallery() {
       className="relative flex flex-col overflow-hidden"
       style={{ backgroundColor: BG }}
     >
-      {/* ── Section header ── */}
+      {/*  Section header  */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -41,7 +41,7 @@ export default function Gallery() {
         </p>
       </motion.div>
 
-      {/* ── 3D Gallery — hero element ── */}
+      {/*  3D Gallery — hero element  */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

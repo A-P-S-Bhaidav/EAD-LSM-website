@@ -63,13 +63,13 @@ export default function CustomCursor() {
         return;
       }
 
-      // ── dot: instant snap ──────────────────────────
+      //  dot: instant snap 
       const dotSize = clicking ? 6 : hovering ? 10 : 8;
       dot.style.width  = `${dotSize}px`;
       dot.style.height = `${dotSize}px`;
       dot.style.transform = `translate(${mx - dotSize / 2}px, ${my - dotSize / 2}px)`;
 
-      // ── mid ring: lerp 0.18 ────────────────────────
+      //  mid ring: lerp 0.18 
       midX = lerp(midX, mx, 0.18);
       midY = lerp(midY, my, 0.18);
       const midSize  = hovering ? 36 : clicking ? 20 : 26;
@@ -82,7 +82,7 @@ export default function CustomCursor() {
         ? 'rgba(147,197,253,0.9)'   // blue-300
         : 'rgba(99,179,237,0.6)';   // sky-400
 
-      // ── outer ring: lerp 0.07 ──────────────────────
+      //  outer ring: lerp 0.07 
       outX = lerp(outX, mx, 0.07);
       outY = lerp(outY, my, 0.07);
       const outSize  = hovering ? 58 : clicking ? 38 : 46;
@@ -95,7 +95,7 @@ export default function CustomCursor() {
         ? 'rgba(96,165,250,0.7)'    // blue-400
         : 'rgba(67,130,202,0.4)';   // indigo-400
 
-      // ── glow blob: slowest, lerp 0.04 ─────────────
+      //  glow blob: slowest, lerp 0.04 ─
       glowX = lerp(glowX, mx, 0.04);
       glowY = lerp(glowY, my, 0.04);
       const glowSize = hovering ? 110 : 80;

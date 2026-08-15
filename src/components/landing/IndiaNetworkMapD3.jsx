@@ -23,7 +23,7 @@ const PROJECTION_CONFIG = {
   center: [82.5, 27.0],
 };
 
-// ── Interactive City Detail Modal ─────────────────────────────────────────────
+//  Interactive City Detail Modal ─
 function CityModal({ city, onClose }) {
   const isOrigin = city?.isOrigin;
 
@@ -192,7 +192,7 @@ export default function IndiaNetworkMapD3() {
   return (
     <div ref={containerRef} className="relative w-full h-full select-none flex flex-col justify-between font-montserrat">
       
-      {/* ── TOP CONTROLS: SEARCH & REGION FILTERS ── */}
+      {/*  TOP CONTROLS: SEARCH & REGION FILTERS  */}
       <div className="absolute top-2 left-2 right-2 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-auto">
         {/* Search Bar */}
         <div className="relative flex items-center bg-white/90 backdrop-blur-md border border-slate-200 rounded-xl px-3 py-1.5 shadow-xs w-48 sm:w-56">
@@ -229,7 +229,7 @@ export default function IndiaNetworkMapD3() {
         </div>
       </div>
 
-      {/* ── MAP CONTAINER ── */}
+      {/*  MAP CONTAINER  */}
       <div className="relative w-full h-full flex-1">
         
         {/* Map Canvas */}
@@ -410,7 +410,7 @@ export default function IndiaNetworkMapD3() {
         </ComposableMap>
       </div>
 
-      {/* ── BOTTOM MAP CONTROLS: ZOOM & NETWORK COUNTER ── */}
+      {/*  BOTTOM MAP CONTROLS: ZOOM & NETWORK COUNTER  */}
       <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
         
         {/* Zoom Control Buttons */}

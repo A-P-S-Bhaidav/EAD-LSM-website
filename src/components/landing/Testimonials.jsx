@@ -21,7 +21,7 @@ export default function Testimonials() {
       <div className="u-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-          {/* ── LEFT SIDE: COMMUNITY HEADER & DESCRIPTION ── */}
+          {/*  LEFT SIDE: COMMUNITY HEADER & DESCRIPTION  */}
           <div className="lg:col-span-5 flex flex-col justify-center">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -43,7 +43,7 @@ export default function Testimonials() {
             </motion.div>
           </div>
 
-          {/* ── RIGHT SIDE: VERTICAL SCROLLING TWEET CARDS ── */}
+          {/*  RIGHT SIDE: VERTICAL SCROLLING TWEET CARDS  */}
           <div className="lg:col-span-7 relative flex items-center justify-center min-h-[500px]">
             <div className="w-full h-full flex items-center justify-center">
               <TestimonialsColumns data={combinedData} />

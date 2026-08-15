@@ -1,8 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 export default function useLandingState() {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [luckyOpen, setLuckyOpen] = useState(false);
@@ -30,8 +32,15 @@ export default function useLandingState() {
       sessionStorage.setItem('ead_lsm_interest', choice);
     }
     setShowPopup(false);
-    // Show questionnaire after popup
-    setQuestionnaireOpen(true);
+    
+    // Redirect cleanly to the corresponding new registration routes
+    if (choice === 'EAD') {
+      router.push('/register-ead');
+    } else if (choice === 'LSM') {
+      router.push('/register-lsm');
+    } else if (choice === 'Both') {
+      router.push('/register-ead');
+    }
   };
 
   const handlePopupClose = () => {
@@ -63,10 +72,70 @@ export default function useLandingState() {
       ? [...events, 'Pitching']
       : events;
     localStorage.setItem('pending_event_pref', JSON.stringify(finalEvents));
-    return await supabase.auth.signInWithOtp({
-      email,
-      options: { data: { registered_events: finalEvents } }
-    });
+    
+    try {
+      const res = await fetch('/api/otp/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { error: { message: data.error || 'Failed to send OTP. Please try again.' } };
+      }
+      return { success: true };
+    } catch (err) {
+      console.error(err);
+      return { error: { message: 'An error occurred. Please try again.' } };
+    }
+  };
+
+  const verifyOTP = async (email, code) => {
+    try {
+      const pending = localStorage.getItem('pending_event_pref');
+      const events = pending ? JSON.parse(pending) : [];
+      const isLsm = events.includes('LSM');
+      
+      const res = await fetch('/api/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          code: code.trim(),
+          isLsm
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { error: { message: data.error || 'Invalid code. Please try again.' } };
+      }
+      
+      // Save session locally
+      localStorage.setItem('ead_lsm_session', data.token);
+      localStorage.setItem('registered_events', JSON.stringify(events));
+      
+      // Also register user for the events in user_registrations table
+      const emailClean = email.trim().toLowerCase();
+      await supabase
+        .from('user_registrations')
+        .upsert({ email: emailClean, registered_events: events.join(',') });
+      
+      // Trigger update of user UI state
+      const customUser = {
+        email: emailClean,
+        id: emailClean,
+        user_metadata: {
+          email: emailClean,
+          registered_events: events
+        },
+        app_metadata: { provider: 'email-otp' }
+      };
+      await updateAuthUI(customUser);
+      return { success: true };
+    } catch (err) {
+      console.error(err);
+      return { error: { message: 'An error occurred during verification.' } };
+    }
   };
 
   const signInWithGoogle = async (events) => {
@@ -194,7 +263,7 @@ export default function useLandingState() {
 
   return {
     user, authOpen, setAuthOpen, luckyOpen, setLuckyOpen, hasEAD,
-    showDraw, drawText, sendOTP, signInWithGoogle, logoutUser, generateLuckyNumber,
+    showDraw, drawText, sendOTP, verifyOTP, signInWithGoogle, logoutUser, generateLuckyNumber,
     showPopup, handlePopupSelect, handlePopupClose,
     questionnaireOpen, setQuestionnaireOpen, handleQuestionnaireSubmit, questionnaireData,
     profileOpen, setProfileOpen,

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import useLandingState from '@/hooks/useLandingState';
 import Navbar from '@/components/landing/Navbar';
@@ -37,6 +38,7 @@ export default function RegisterEadPage() {
   const [form, setForm] = useState({
     name: '',
     email: '',
+    password: '',
     college: '',
     location: '',
   });
@@ -64,6 +66,8 @@ export default function RegisterEadPage() {
     if (!form.name.trim()) newErrors.name = 'Full name is required';
     if (!form.email.trim()) newErrors.email = 'Email address is required';
     else if (!form.email.includes('@') || !form.email.includes('.')) newErrors.email = 'Enter a valid email address';
+    if (!form.password) newErrors.password = 'Password is required';
+    else if (form.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
     if (!form.location.trim()) newErrors.location = 'EAD Location is required';
     return newErrors;
   };
@@ -114,6 +118,8 @@ export default function RegisterEadPage() {
         body: JSON.stringify({
           email: form.email.trim().toLowerCase(),
           code: otp.trim(),
+          isLsm: false,
+          password: form.password
         }),
       });
       const data = await res.json();
@@ -239,6 +245,21 @@ export default function RegisterEadPage() {
                 </div>
 
                 <div>
+                  <label className="block text-[0.65rem] font-bold tracking-[0.1em] uppercase text-gray-500 mb-1">Set Password *</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="Choose a secure password"
+                    className={`w-full py-2.5 px-3.5 bg-slate-50 border rounded-xl text-sm text-gray-900 outline-none transition-colors duration-200 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                      errors.password ? 'border-red-400 bg-red-50/50' : 'border-slate-200'
+                    }`}
+                  />
+                  {errors.password && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.password}</p>}
+                </div>
+
+                <div>
                   <label className="block text-[0.65rem] font-bold tracking-[0.1em] uppercase text-gray-500 mb-1">College / Institution</label>
                   <input
                     type="text"
@@ -268,11 +289,23 @@ export default function RegisterEadPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full mt-1.5 py-3 bg-[#0F172A] hover:bg-[#1E293B] text-white rounded-xl font-bold tracking-wider uppercase text-xs transition-colors disabled:bg-gray-300 shadow-sm"
+                  className="w-full mt-1.5 py-3 bg-[#0F172A] hover:bg-[#1E293B] text-white rounded-xl font-bold tracking-wider uppercase text-xs transition-colors disabled:bg-gray-300 shadow-sm border-none cursor-pointer"
                 >
                   {loading ? 'Sending OTP...' : 'Send Verification Code ➔'}
                 </button>
               </form>
+
+              <div className="text-center pt-4 border-t border-slate-100 mt-5">
+                <p className="text-xs text-slate-500 font-medium">
+                  Already registered?{' '}
+                  <Link
+                    href="/ead/login"
+                    className="text-blue-600 hover:text-blue-700 font-bold underline"
+                  >
+                    Log In here
+                  </Link>
+                </p>
+              </div>
             </div>
           )}
 

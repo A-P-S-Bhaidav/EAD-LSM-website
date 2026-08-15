@@ -62,7 +62,7 @@ html.is-loading [data-navbar] {
   --nav-inactive: #E2E8F0 !important;
 }
 
-/* ── Navbar & Links Visibility Overrides ── */
+/*  Navbar & Links Visibility Overrides  */
 header.fixed-navbar {
   position: fixed !important;
   top: 0 !important;
@@ -279,7 +279,7 @@ html {
   padding: 5vh 0 !important;
 }
 
-/* ── Per-section background shades — 2-Combo Palette (#F4F7F9 & #7DA6A9) ── */
+/*  Per-section background shades — 2-Combo Palette (#F4F7F9 & #7DA6A9)  */
 
 /* 02 — What is EAD */
 [id="what-is-ead"] {

@@ -131,7 +131,7 @@ export default function WhatIsEAD() {
       <div className="u-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
-          {/* ── LEFT COLUMN (STATIC / PINNED 100VH STICKY CENTERING) ── */}
+          {/*  LEFT COLUMN (STATIC / PINNED 100VH STICKY CENTERING)  */}
           <div className="lg:col-span-5 lg:sticky lg:top-0 lg:h-screen self-start flex flex-col justify-center py-12 lg:py-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -152,7 +152,7 @@ export default function WhatIsEAD() {
             </motion.div>
           </div>
 
-          {/* ── RIGHT COLUMN (BOTH CARDS VISIBLE ON ONE SCREEN) ── */}
+          {/*  RIGHT COLUMN (BOTH CARDS VISIBLE ON ONE SCREEN)  */}
           <div className="lg:col-span-7 flex flex-col justify-center gap-5 py-8 lg:py-0 lg:min-h-screen">
             <InitiativeCard data={EAD_DATA} delay={0.1} />
             <InitiativeCard data={LSM_DATA} delay={0.2} />

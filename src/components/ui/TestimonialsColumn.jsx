@@ -1,19 +1,12 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Testimonial } from './testimonials-data';
-
-interface TestimonialsColumnProps {
-  className?: string;
-  testimonials: Testimonial[];
-  duration?: number;
-}
 
 export default function TestimonialsColumn({
   className = '',
-  testimonials,
+  testimonials = [],
   duration = 14,
-}: TestimonialsColumnProps) {
+}) {
   return (
     <div className={className}>
       <motion.ul
@@ -45,11 +38,16 @@ export default function TestimonialsColumn({
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <img
-                      src={image}
-                      alt={`Avatar of ${name}`}
-                      className="testimonial-avatar"
-                    />
+                    <div 
+                      className="testimonial-avatar flex items-center justify-center bg-slate-100 border border-slate-200 text-slate-700 font-extrabold text-[11px] font-montserrat tracking-wider uppercase select-none"
+                    >
+                      {(() => {
+                        if (!name) return '';
+                        const parts = name.trim().split(/\s+/);
+                        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+                        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+                      })()}
+                    </div>
                     <div>
                       <h4 className="testimonial-name">{name}</h4>
                       {handle && (

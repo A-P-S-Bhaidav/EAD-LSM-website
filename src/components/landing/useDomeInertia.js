@@ -52,7 +52,7 @@ export default function useDomeInertia({
     inertiaRAF.current = requestAnimationFrame(step);
   }, [dragDampening, maxVerticalRotationDeg, stopInertia, applyTransform]);
 
-  // ── Infinite Auto-Rotation Loop ──
+  //  Infinite Auto-Rotation Loop 
   useEffect(() => {
     let animId;
     const autoRotate = () => {

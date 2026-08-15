@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 const useCanvasCursor = () => {
   useEffect(() => {
-    /* ── state ── */
+    /*  state  */
     let ctx;
     let f;
     let e = 0;
@@ -18,7 +18,7 @@ const useCanvasCursor = () => {
       tension: 0.98,
     };
 
-    /* ── Wave oscillator ── */
+    /*  Wave oscillator  */
     function Wave(opts) {
       this.phase = opts.phase || 0;
       this.offset = opts.offset || 0;
@@ -34,7 +34,7 @@ const useCanvasCursor = () => {
       return e;
     };
 
-    /* ── Node ── */
+    /*  Node  */
     function Node() {
       this.x = 0;
       this.y = 0;
@@ -42,7 +42,7 @@ const useCanvasCursor = () => {
       this.vy = 0;
     }
 
-    /* ── Line (trail) ── */
+    /*  Line (trail)  */
     function Line(opts) {
       this.spring = opts.spring + 0.1 * Math.random() - 0.02;
       this.friction = E.friction + 0.01 * Math.random() - 0.002;
@@ -95,7 +95,7 @@ const useCanvasCursor = () => {
       ctx.closePath();
     };
 
-    /* ── init lines ── */
+    /*  init lines  */
     function initLines() {
       lines = [];
       for (let i = 0; i < E.trails; i++) {
@@ -103,7 +103,7 @@ const useCanvasCursor = () => {
       }
     }
 
-    /* ── pointer handlers ── */
+    /*  pointer handlers  */
     function onPointerMove(ev) {
       if (ev.touches) {
         pos.x = ev.touches[0].pageX;
@@ -121,7 +121,7 @@ const useCanvasCursor = () => {
       }
     }
 
-    /* ── first-move bootstrap ── */
+    /*  first-move bootstrap  */
     function onFirstMove(ev) {
       document.removeEventListener('mousemove', onFirstMove);
       document.removeEventListener('touchstart', onFirstMove);
@@ -133,7 +133,7 @@ const useCanvasCursor = () => {
       render();
     }
 
-    /* ── render loop ── */
+    /*  render loop  */
     function render() {
       if (!ctx || !ctx.running) return;
       ctx.globalCompositeOperation = 'source-over';
@@ -148,14 +148,14 @@ const useCanvasCursor = () => {
       window.requestAnimationFrame(render);
     }
 
-    /* ── resize ── */
+    /*  resize  */
     function resizeCanvas() {
       if (!ctx) return;
       ctx.canvas.width = window.innerWidth;
       ctx.canvas.height = window.innerHeight;
     }
 
-    /* ── boot ── */
+    /*  boot  */
     const canvas = document.getElementById('cursor-canvas');
     if (!canvas) return;
 
@@ -180,7 +180,7 @@ const useCanvasCursor = () => {
     });
     window.addEventListener('blur', () => { ctx.running = false; });
 
-    /* ── cleanup ── */
+    /*  cleanup  */
     return () => {
       ctx.running = false;
       document.removeEventListener('mousemove', onFirstMove);

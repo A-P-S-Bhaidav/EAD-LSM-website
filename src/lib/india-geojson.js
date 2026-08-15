@@ -27,7 +27,7 @@ export const indiaGeoJSON = {
             // but D3 handles both — we'll use clockwise (right-hand rule exterior)
             // ═══════════════════════════════════════════════════
 
-            // ── GUJARAT / RAJASTHAN west border (Pakistan side) going NORTH ──
+            //  GUJARAT / RAJASTHAN west border (Pakistan side) going NORTH 
             [68.18, 23.63],
             [68.84, 24.36],
             [71.04, 24.36],
@@ -45,7 +45,7 @@ export const indiaGeoJSON = {
             [74.45, 32.76],
             [74.10, 33.44],
 
-            // ── POK: Mirpur / Muzaffarabad / Azad Kashmir (India's claim) ──
+            //  POK: Mirpur / Muzaffarabad / Azad Kashmir (India's claim) 
             [73.80, 33.50],
             [73.50, 33.80],
             [73.20, 34.10],
@@ -55,7 +55,7 @@ export const indiaGeoJSON = {
             [71.60, 35.00],
             [71.20, 35.30],
 
-            // ── GILGIT-BALTISTAN (India's claim) going northwest ──
+            //  GILGIT-BALTISTAN (India's claim) going northwest 
             [71.00, 35.60],
             [71.50, 35.90],
             [72.10, 36.10],
@@ -70,13 +70,13 @@ export const indiaGeoJSON = {
             [76.50, 36.10],
             [77.00, 35.80],
 
-            // ── KARAKORAM / SIACHEN area → Aksai Chin claim line ──
+            //  KARAKORAM / SIACHEN area → Aksai Chin claim line 
             // India's claim in Aksai Chin runs northeast along Karakoram/Kunlun
             [77.80, 35.50],
             [78.38, 35.49],
             [78.91, 34.32],
 
-            // ── AKSAI CHIN: India's claim goes east along the Kunlun foothills ──
+            //  AKSAI CHIN: India's claim goes east along the Kunlun foothills 
             [79.00, 34.00],
             [79.40, 34.20],
             [80.00, 34.50],
@@ -91,7 +91,7 @@ export const indiaGeoJSON = {
             [86.50, 34.35],
             [87.00, 34.15],
 
-            // ── TURNING SOUTH: back to actual LAC / tri-junction area ──
+            //  TURNING SOUTH: back to actual LAC / tri-junction area 
             // From east of Aksai Chin, the China border turns south
             // heading back to the J&K / HP / Uttarakhand border
             [87.40, 34.00],
@@ -99,7 +99,7 @@ export const indiaGeoJSON = {
             // Actually from eastern Aksai Chin, just continue:
             // We continue the northern boundary eastward toward Himachal/Uttarakhand
 
-            // ── HIMACHAL PRADESH / UTTARAKHAND border with China (going east) ──
+            //  HIMACHAL PRADESH / UTTARAKHAND border with China (going east) 
             // China border near Spiti / Kinnaur / Chamoli
             [79.21, 32.99],
             [78.81, 33.51],
@@ -109,7 +109,7 @@ export const indiaGeoJSON = {
             [79.72, 30.88],
             [81.11, 30.18],
 
-            // ── NEPAL BORDER ──
+            //  NEPAL BORDER 
             [80.48, 29.73],
             [80.09, 28.79],
             [81.06, 28.42],
@@ -120,7 +120,7 @@ export const indiaGeoJSON = {
             [86.02, 26.63],
             [87.23, 26.40],
 
-            // ── WEST BENGAL / SIKKIM / BHUTAN / ARUNACHAL border going east ──
+            //  WEST BENGAL / SIKKIM / BHUTAN / ARUNACHAL border going east 
             [88.06, 26.41],
             [88.17, 26.81],
             [88.04, 27.45],
@@ -136,13 +136,13 @@ export const indiaGeoJSON = {
             [91.70, 27.77],
             [92.50, 27.90],
 
-            // ── ARUNACHAL PRADESH (McMahon Line) ──
+            //  ARUNACHAL PRADESH (McMahon Line) 
             [93.41, 28.64],
             [94.57, 29.28],
             [95.40, 29.03],
             [96.25, 29.45],
 
-            // ── ARUNACHAL EAST / MYANMAR BORDER ──
+            //  ARUNACHAL EAST / MYANMAR BORDER 
             [96.59, 28.83],
             [96.25, 28.41],
             [97.33, 28.26],
@@ -161,7 +161,7 @@ export const indiaGeoJSON = {
             [93.17, 22.28],
             [92.67, 22.04],
 
-            // ── MIZORAM / TRIPURA / BANGLADESH BORDER ──
+            //  MIZORAM / TRIPURA / BANGLADESH BORDER 
             [92.15, 23.63],
             [91.87, 23.62],
             [91.71, 22.99],
@@ -187,7 +187,7 @@ export const indiaGeoJSON = {
             [89.03, 22.06],
             [88.89, 21.69],
 
-            // ── EAST COAST (WB → Odisha → AP → TN) ──
+            //  EAST COAST (WB → Odisha → AP → TN) 
             [88.21, 21.70],
             [86.98, 21.50],
             [87.03, 20.74],
@@ -208,13 +208,13 @@ export const indiaGeoJSON = {
             [79.34, 10.31],
             [78.89, 9.55],
 
-            // ── SOUTH TIP ──
+            //  SOUTH TIP 
             [79.19, 9.22],
             [78.28, 8.93],
             [77.94, 8.25],
             [77.54, 8.08],
 
-            // ── WEST COAST (Kerala → Karnataka → Goa → Maharashtra → Gujarat) ──
+            //  WEST COAST (Kerala → Karnataka → Goa → Maharashtra → Gujarat) 
             [76.59, 8.90],
             [76.13, 10.30],
             [75.75, 11.31],
@@ -233,7 +233,7 @@ export const indiaGeoJSON = {
             [69.16, 22.09],
             [69.64, 22.45],
 
-            // ── CLOSE POLYGON ──
+            //  CLOSE POLYGON 
             [68.18, 23.63]
           ]
         ]

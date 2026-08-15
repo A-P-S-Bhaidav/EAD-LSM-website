@@ -80,7 +80,7 @@ export default function EadLsmFlow() {
           </p>
         </div>
 
-        {/* ── TIMELINE CONTAINER ── */}
+        {/*  TIMELINE CONTAINER  */}
         <div className="relative font-montserrat w-full">
 
           {/* Horizontal Track (Line) — visible on desktop only */}
