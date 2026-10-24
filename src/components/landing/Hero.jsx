@@ -40,33 +40,37 @@ export default function Hero({ hasEAD, showLuckyDrawBtn, luckyDrawText, onLuckyD
 
       {/* Hero Content Overlay */}
       <div className="relative z-20 w-full max-w-4xl mx-auto px-6 text-center flex flex-col items-center justify-center h-full pointer-events-none">
-        
+
         {/* Eyebrow */}
         <p className="text-xs md:text-sm font-mono font-black uppercase tracking-[0.25em] text-[#0F172A]/70 mb-4 animate-fade-in">
           Entrepreneurship Cell, IIT Kharagpur presents
         </p>
-        
+
         {/* H1 Heading */}
         <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-montserrat font-black leading-tight tracking-tight text-[#0F172A] mb-6 drop-shadow-2xs">
           EAD-LSM: Where India's Next Wave of Entrepreneurs Begins
         </h1>
-        
+
         {/* Subhead */}
         <p className="text-[#0F172A]/85 text-xs sm:text-base md:text-lg max-w-2xl leading-relaxed mb-8 font-montserrat font-medium">
           The Entrepreneurship Awareness Drive and Local Startups Meet bring founders, investors, and students together across 20+ cities — building the largest PAN-India entrepreneurship network of its kind.
         </p>
-        
+
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto pointer-events-auto">
           <a
-            href="/register-ead"
-            className="w-full sm:w-auto min-w-[180px] bg-[#0F172A] hover:bg-[#1E293B] text-white border-none py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 text-center cursor-pointer no-underline"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdKt9Gdi38ylyrosM1tvcxfjtBnSNtJtsUloC_0g5u_ctCRuw/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto min-w-[180px] bg-[#0F172A] hover:bg-[#1E293B] text-white border-none py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 text-center cursor-pointer no-underline flex items-center justify-center"
           >
             Register EAD
           </a>
           <a
-            href="/register-lsm"
-            className="w-full sm:w-auto min-w-[180px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white border-none py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 text-center cursor-pointer no-underline"
+            href="https://docs.google.com/forms/d/1GAFX0tb9pRztjLgdCw4_650h4piK1RTvXw8GzNiZJdA/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto min-w-[180px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white border-none py-3.5 px-8 font-montserrat font-black text-xs md:text-sm tracking-wider uppercase rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:scale-95 text-center cursor-pointer no-underline flex items-center justify-center"
           >
             Register LSM
           </a>
@@ -79,9 +83,8 @@ export default function Hero({ hasEAD, showLuckyDrawBtn, luckyDrawText, onLuckyD
         <button
           id="lucky-draw-btn"
           onClick={isLuckyNumber ? null : onLuckyDrawClick}
-          className={`absolute bottom-[20px] md:bottom-[35px] left-[20px] md:left-[40px] z-50 bg-[#0F172A] hover:bg-[#1E293B] text-white border-none py-2.5 md:py-3.5 px-5 md:px-7 font-montserrat font-extrabold text-[0.75rem] md:text-[0.85rem] tracking-wider uppercase rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 ${
-            isLuckyNumber ? 'cursor-default' : 'cursor-pointer'
-          }`}
+          className={`absolute bottom-[20px] md:bottom-[35px] left-[20px] md:left-[40px] z-50 bg-[#0F172A] hover:bg-[#1E293B] text-white border-none py-2.5 md:py-3.5 px-5 md:px-7 font-montserrat font-extrabold text-[0.75rem] md:text-[0.85rem] tracking-wider uppercase rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-0.5 ${isLuckyNumber ? 'cursor-default' : 'cursor-pointer'
+            }`}
         >
           {luckyDrawText}
         </button>

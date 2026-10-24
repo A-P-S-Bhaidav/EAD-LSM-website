@@ -33,14 +33,16 @@ export default function useLandingState() {
       sessionStorage.setItem('ead_lsm_interest', choice);
     }
     setShowPopup(false);
-    
-    // Redirect cleanly to the corresponding new registration routes
+
+    const EAD_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdKt9Gdi38ylyrosM1tvcxfjtBnSNtJtsUloC_0g5u_ctCRuw/viewform';
+    const LSM_FORM_URL = 'https://docs.google.com/forms/d/1GAFX0tb9pRztjLgdCw4_650h4piK1RTvXw8GzNiZJdA/viewform';
+
     if (choice === 'EAD') {
-      router.push('/register-ead');
+      window.open(EAD_FORM_URL, '_blank', 'noopener,noreferrer');
     } else if (choice === 'LSM') {
-      router.push('/register-lsm');
+      window.open(LSM_FORM_URL, '_blank', 'noopener,noreferrer');
     } else if (choice === 'Both') {
-      router.push('/register-ead');
+      window.open(EAD_FORM_URL, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -72,7 +74,7 @@ export default function useLandingState() {
       ? [...events, 'Pitching']
       : events;
     localStorage.setItem('pending_event_pref', JSON.stringify(finalEvents));
-    
+
     try {
       const res = await fetch('/api/otp/send', {
         method: 'POST',
@@ -95,7 +97,7 @@ export default function useLandingState() {
       const pending = localStorage.getItem('pending_event_pref');
       const events = pending ? JSON.parse(pending) : [];
       const isLsm = events.includes('LSM');
-      
+
       const res = await fetch('/api/otp/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -109,18 +111,18 @@ export default function useLandingState() {
       if (!res.ok || !data.success) {
         return { error: { message: data.error || 'Invalid code. Please try again.' } };
       }
-      
+
       // Save session locally
       localStorage.setItem('ead_lsm_session', data.token);
       localStorage.setItem('registered_events', JSON.stringify(events));
-      
+
       // Also register user for the events in user_registrations table
       const emailClean = email.trim().toLowerCase();
       await queryDatabase('upsertUserRegistration', {
         email: emailClean,
         registeredEvents: events.join(','),
       });
-      
+
       // Trigger update of user UI state
       const customUser = {
         email: emailClean,
@@ -195,7 +197,7 @@ export default function useLandingState() {
       setHasEAD(hasEadEvent);
       if (u.email) {
         queryDatabase('upsertUserRegistration', { email: u.email, registeredEvents: events.join(',') })
-          .then(() => {}).catch(e => console.error(e));
+          .then(() => { }).catch(e => console.error(e));
       }
       if (hasEadEvent) {
         setShowDraw(true);

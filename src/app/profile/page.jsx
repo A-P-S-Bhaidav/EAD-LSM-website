@@ -45,7 +45,7 @@ export default function ProfilePage() {
         try {
           // Fetch lucky numbers
           const { data: draws } = await queryDatabase('getUserLuckyDraws', { email: user.email });
-          
+
           setLuckyNumbers(draws || []);
 
           // Fetch questionnaire response
@@ -75,7 +75,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen bg-[#F4F7F9] font-montserrat">
-        <Navbar user={user} onMenuToggle={handleMenuToggle} onProfileClick={() => {}} />
+        <Navbar user={user} onMenuToggle={handleMenuToggle} onProfileClick={() => { }} />
         <MobileMenu onLinkClick={handleMenuClose} />
         <main className="flex-grow flex items-center justify-center min-h-[calc(100vh-80px)] pt-24 pb-12 px-4">
           <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
@@ -88,7 +88,7 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <div className="flex flex-col min-h-screen bg-[#F4F7F9] font-montserrat">
-        <Navbar user={user} onMenuToggle={handleMenuToggle} onProfileClick={() => {}} />
+        <Navbar user={user} onMenuToggle={handleMenuToggle} onProfileClick={() => { }} />
         <MobileMenu onLinkClick={handleMenuClose} />
         <main className="flex-grow flex items-center justify-center min-h-[calc(100vh-80px)] pt-24 pb-12 px-4">
           <div className="bg-white rounded-3xl p-8 sm:p-10 w-full max-w-[440px] shadow-[0_15px_40px_rgba(15,23,42,0.05)] border border-slate-200/60 text-center">
@@ -100,21 +100,25 @@ export default function ProfilePage() {
             </div>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900 mb-2">Access Denied</h1>
             <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-              Please register or log in to view your profile page.
+              Please register using the official forms below.
             </p>
             <div className="flex flex-col gap-3">
-              <button
-                onClick={() => router.push('/register-ead')}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold uppercase tracking-wider text-xs transition-colors"
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdKt9Gdi38ylyrosM1tvcxfjtBnSNtJtsUloC_0g5u_ctCRuw/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold uppercase tracking-wider text-xs transition-colors text-center no-underline block"
               >
                 Register for EAD Drive
-              </button>
-              <button
-                onClick={() => router.push('/register-lsm')}
-                className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold uppercase tracking-wider text-xs transition-colors"
+              </a>
+              <a
+                href="https://docs.google.com/forms/d/1GAFX0tb9pRztjLgdCw4_650h4piK1RTvXw8GzNiZJdA/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold uppercase tracking-wider text-xs transition-colors text-center no-underline block"
               >
                 Register for LSM Summit
-              </button>
+              </a>
             </div>
           </div>
         </main>
@@ -138,12 +142,12 @@ export default function ProfilePage() {
       const singleInit = parts[0].slice(0, 2).toUpperCase();
       if (/^[A-Z]/.test(singleInit)) return singleInit;
     }
-    
+
     const emailParts = email.split('@')[0];
     const letters = emailParts.replace(/[^a-zA-Z]/g, '');
     if (letters.length >= 2) return letters.slice(0, 2).toUpperCase();
     if (letters.length === 1) return letters.toUpperCase() + 'N';
-    
+
     return 'IN';
   })();
 
@@ -188,7 +192,7 @@ export default function ProfilePage() {
 
       <Navbar
         user={user}
-        onAuthClick={() => {}}
+        onAuthClick={() => { }}
         onMenuToggle={handleMenuToggle}
         onProfileClick={() => router.push('/profile')}
       />
@@ -196,9 +200,9 @@ export default function ProfilePage() {
 
       <main className="flex-grow flex items-center justify-center min-h-[calc(100vh-80px)] pt-24 pb-12 px-4 relative z-10">
         <div className="u-container max-w-4xl mx-auto w-full">
-          
+
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
-            
+
             {/* Left Column - Redesigned User Card */}
             <div className="md:col-span-4 backdrop-blur-md bg-white/75 rounded-3xl p-6 shadow-[0_20px_50px_rgba(15,23,42,0.04)] border border-white/60 text-center flex flex-col items-center justify-between transition-all duration-300 hover:shadow-[0_25px_60px_rgba(15,23,42,0.07)]">
               <div className="flex flex-col items-center w-full">
@@ -217,13 +221,12 @@ export default function ProfilePage() {
                 </h2>
                 <p className="text-slate-400 text-xs truncate w-full px-2 mb-5 font-medium">{email}</p>
 
-                <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider mb-6 shadow-xs border ${
-                  isEadRegistered && isLsmRegistered
+                <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider mb-6 shadow-xs border ${isEadRegistered && isLsmRegistered
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white border-transparent'
                     : isLsmRegistered
-                    ? 'bg-purple-50 text-purple-700 border-purple-100'
-                    : 'bg-blue-50 text-blue-700 border-blue-100'
-                }`}>
+                      ? 'bg-purple-50 text-purple-700 border-purple-100'
+                      : 'bg-blue-50 text-blue-700 border-blue-100'
+                  }`}>
                   <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
                   {getBadgeText()}
                 </span>
@@ -249,24 +252,28 @@ export default function ProfilePage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="md:col-span-8 flex flex-col gap-6"
             >
-              
+
               {/* If no registrations found */}
               {!isEadRegistered && !isLsmRegistered && (
                 <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-slate-200/60 text-center shadow-[0_20px_50px_rgba(15,23,42,0.03)]">
                   <p className="text-slate-400 text-sm italic mb-5 font-medium">You have not registered for any events yet.</p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <button
-                      onClick={() => router.push('/register-ead')}
-                      className="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer border-none shadow-md transition-all hover:scale-[1.02]"
+                    <a
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSdKt9Gdi38ylyrosM1tvcxfjtBnSNtJtsUloC_0g5u_ctCRuw/viewform"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer border-none shadow-md transition-all hover:scale-[1.02] text-center no-underline inline-block"
                     >
                       Register for EAD
-                    </button>
-                    <button
-                      onClick={() => router.push('/register-lsm')}
-                      className="py-3 px-6 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer border-none shadow-md transition-all hover:scale-[1.02]"
+                    </a>
+                    <a
+                      href="https://docs.google.com/forms/d/1GAFX0tb9pRztjLgdCw4_650h4piK1RTvXw8GzNiZJdA/viewform"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-3 px-6 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer border-none shadow-md transition-all hover:scale-[1.02] text-center no-underline inline-block"
                     >
                       Register for LSM
-                    </button>
+                    </a>
                   </div>
                 </div>
               )}
@@ -274,7 +281,7 @@ export default function ProfilePage() {
               {/* 1. EAD Event Ticket (with Lucky Draw) */}
               {isEadRegistered && (
                 <div className="bg-white/85 backdrop-blur-md rounded-[2rem] shadow-[0_20px_50px_rgba(15,23,42,0.03)] border border-slate-200/60 overflow-hidden relative transition-all duration-300 hover:shadow-[0_25px_60px_rgba(15,23,42,0.06)]">
-                  
+
                   {/* Header Strip with rich indigo gradient */}
                   <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 p-7 text-white text-left relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-white/5 blur-2xl pointer-events-none" />
@@ -336,7 +343,7 @@ export default function ProfilePage() {
               {/* 2. LSM Startup Pass (with detailed questionnaire) */}
               {isLsmRegistered && (
                 <div className="bg-white/85 backdrop-blur-md rounded-[2rem] shadow-[0_20px_50px_rgba(15,23,42,0.03)] border border-slate-200/60 overflow-hidden relative transition-all duration-300 hover:shadow-[0_25px_60px_rgba(15,23,42,0.06)]">
-                  
+
                   {/* Header Strip with premium purple/indigo gradient */}
                   <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 p-7 text-white text-left relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-white/5 blur-2xl pointer-events-none" />
@@ -358,7 +365,7 @@ export default function ProfilePage() {
 
                   {/* Pass details */}
                   <div className="p-7 sm:p-8 flex flex-col gap-6 text-left">
-                    
+
                     {/* Render parsed startup profile */}
                     {startup ? (
                       <div className="flex flex-col gap-6">
@@ -399,7 +406,7 @@ export default function ProfilePage() {
                             <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider block">Submitted Pitch Deck</span>
                             <span className="text-[11px] text-slate-500 font-medium truncate block mt-0.5">{startup['Pitch Deck Link']}</span>
                           </div>
-                          <a 
+                          <a
                             href={startup['Pitch Deck Link']}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -412,7 +419,7 @@ export default function ProfilePage() {
                         {/* Founders Team details */}
                         <div className="pt-5 border-t border-slate-100 flex flex-col gap-3">
                           <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Founding Team</span>
-                          
+
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {/* Founder 1 */}
                             <div className="flex flex-col text-xs bg-slate-50/60 p-3.5 rounded-2xl border border-slate-100/50">
@@ -472,7 +479,7 @@ export default function ProfilePage() {
                             <span className="font-extrabold text-slate-800 text-sm">{questionnaire?.experience || 'Founder'}</span>
                           </div>
                         </div>
-                        
+
                         <div className="p-4 bg-purple-50/60 border-l-4 border-purple-500 rounded-r-2xl mt-2 flex gap-3">
                           <div className="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 text-purple-600 text-xs font-bold font-mono">i</div>
                           <div>

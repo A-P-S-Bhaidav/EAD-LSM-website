@@ -1,3 +1,5 @@
+// BACKEND DISABLED - Neon DB connection commented out
+/*
 import postgres from 'postgres';
 
 const connectionString = process.env.NEON_DB_URL;
@@ -6,7 +8,6 @@ if (!connectionString) {
   console.warn('Warning: NEON_DB_URL environment variable is missing.');
 }
 
-// Next.js hot-reloading connection reuse in development
 let sql;
 
 if (process.env.NODE_ENV === 'production') {
@@ -17,5 +18,7 @@ if (process.env.NODE_ENV === 'production') {
   }
   sql = global.postgresSqlClient;
 }
+*/
 
+const sql = null;
 export { sql };

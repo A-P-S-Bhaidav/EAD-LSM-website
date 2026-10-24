@@ -24,7 +24,7 @@ export default function RegisterNow({ onRegisterClick }) {
             <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full opacity-35 pointer-events-none" style={{ background: 'radial-gradient(circle, #B2D2D4, transparent 70%)', transform: 'translate(-25%, 25%)' }} />
 
             <div className="relative z-10 max-w-3xl flex flex-col items-center text-center">
-              
+
               {/* Title */}
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#0F172A] tracking-tight leading-[1.1] mb-6 font-montserrat">
                 Ready to Shape the<br />
@@ -50,20 +50,33 @@ export default function RegisterNow({ onRegisterClick }) {
                 ))}
               </div>
 
-              {/* Centered Register CTA Button */}
-              <motion.button
-                whileHover={{ y: -3, scale: 1.02, boxShadow: '0 20px 45px rgba(15, 23, 42, 0.25)' }}
-                whileTap={{ scale: 0.97 }}
-                onClick={onRegisterClick}
-                suppressHydrationWarning
-                className="inline-flex items-center gap-3.5 px-10 py-5 rounded-2xl font-montserrat font-black text-base md:text-lg tracking-wide cursor-pointer transition-all duration-200 bg-[#0F172A] hover:bg-[#1E293B] text-white border-none shadow-xl"
-              >
-                Register Now
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </motion.button>
+              {/* Register CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdKt9Gdi38ylyrosM1tvcxfjtBnSNtJtsUloC_0g5u_ctCRuw/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-montserrat font-black text-sm md:text-base tracking-wide cursor-pointer transition-all duration-200 bg-[#0F172A] hover:bg-[#1E293B] text-white border-none shadow-xl no-underline"
+                >
+                  Register EAD
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </a>
+                <a
+                  href="https://docs.google.com/forms/d/1GAFX0tb9pRztjLgdCw4_650h4piK1RTvXw8GzNiZJdA/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-montserrat font-black text-sm md:text-base tracking-wide cursor-pointer transition-all duration-200 bg-[#2563EB] hover:bg-[#1D4ED8] text-white border-none shadow-xl no-underline"
+                >
+                  Register LSM
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </a>
+              </div>
 
             </div>
           </div>

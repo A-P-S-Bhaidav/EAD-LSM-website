@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server';
+
+// BACKEND DISABLED - Admin login commented out
+export async function POST(req) {
+  return NextResponse.json({
+    message: 'Backend disabled. Registrations are handled via Google Forms.',
+    success: false
+  }, { status: 200 });
+}
+
+/*
+================================================================================
+PREVIOUS ADMIN LOGIN ROUTE (COMMENTED OUT)
+================================================================================
+
 import { signToken } from '@/lib/auth-tokens';
 
-export async function POST(req) {
+export async function ORIGINAL_POST(req) {
   try {
     const { name, email, ead } = await req.json();
 
@@ -16,12 +30,10 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Invalid admin credentials' }, { status: 401 });
     }
 
-    // Verify ead location if present (used by specific regional admin dashboards)
     if (ead && ead.toLowerCase() !== 'delhi') {
       return NextResponse.json({ error: 'Unauthorized location for this administrator' }, { status: 403 });
     }
 
-    // Sign the admin token
     const token = signToken({
       name,
       email: email.toLowerCase(),
@@ -35,3 +47,5 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+================================================================================
+*/

@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
+
+// BACKEND DISABLED - OTP sending commented out
+export async function POST(req) {
+  return NextResponse.json({
+    message: 'Backend disabled. Registrations are handled via Google Forms.',
+    success: true
+  }, { status: 200 });
+}
+
+/*
+================================================================================
+PREVIOUS OTP SEND ROUTE (COMMENTED OUT)
+================================================================================
+
 import { sql } from '@/lib/db';
 import { saveCachedOtp } from '@/lib/otp-store';
 
-export async function POST(req) {
+export async function ORIGINAL_POST(req) {
   try {
     const { email } = await req.json();
     if (!email) {
@@ -24,54 +38,22 @@ export async function POST(req) {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
-    // Store in filesystem-based fallback cache
     saveCachedOtp(emailClean, code);
 
-    // Store in Neon Postgres otps table
     try {
       await sql`
         INSERT INTO otps (email, code, expires_at)
         VALUES (${emailClean}, ${code}, ${expiresAt})
       `;
     } catch (dbError) {
-      console.warn('DB insert to otps failed, using in-memory log fallback:', dbError.message);
+      console.warn('DB insert to otps failed:', dbError.message);
     }
 
-    // Always log OTP to server console for local testing/fallback
-    console.log(`\n========================================\n[OTP VERIFICATION]\nEmail: ${emailClean}\nCode: ${code}\n========================================\n`);
-
-    // Send via Resend if API key is present
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
-
-    if (resendApiKey) {
-      try {
-        const res = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${resendApiKey}`
-          },
-          body: JSON.stringify({
-            from: `E-Cell IIT Kharagpur <${fromEmail}>`,
-            to: [emailClean],
-            subject: `${code} is your EAD-LSM Verification Code`,
-            html: `<p>Your verification code is <strong>${code}</strong>. It will expire in 10 minutes.</p>`
-          })
-        });
-
-        if (!res.ok) {
-          const errText = await res.text();
-          console.error('Resend API error:', errText);
-        }
-      } catch (emailErr) {
-        console.error('Failed to send email via Resend:', emailErr.message);
-      }
-    }
-
-    return NextResponse.json({ success: true, message: 'OTP sent successfully' });
+    return NextResponse.json({ success: true });
   } catch (err) {
-    console.error('Send OTP error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('OTP Send API Error:', err);
+    return NextResponse.json({ error: 'Failed to process OTP request' }, { status: 500 });
   }
 }
+================================================================================
+*/

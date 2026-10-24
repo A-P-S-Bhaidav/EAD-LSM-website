@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
+
+// BACKEND DISABLED - Auth token exchange commented out
+export async function POST(req) {
+  return NextResponse.json({
+    message: 'Backend disabled. Registrations are handled via Google Forms.',
+    success: false
+  }, { status: 200 });
+}
+
+/*
+================================================================================
+PREVIOUS AUTH TOKEN ROUTE (COMMENTED OUT)
+================================================================================
+
 import { supabase } from '@/lib/supabase';
 import { signToken } from '@/lib/auth-tokens';
 
-export async function POST(req) {
+export async function ORIGINAL_POST(req) {
   try {
     const { token } = await req.json();
 
@@ -10,15 +24,12 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Token is required' }, { status: 400 });
     }
 
-    // Retrieve user from Supabase using the provided access token
     const { data: { user }, error } = await supabase.auth.getUser(token);
 
     if (error || !user) {
-      console.warn('Supabase auth validation failed:', error?.message);
       return NextResponse.json({ error: 'Invalid Supabase session' }, { status: 401 });
     }
 
-    // Generate signed HMAC session token for the database proxy
     const sessionToken = signToken({
       email: user.email.toLowerCase(),
       verified: true,
@@ -32,3 +43,5 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+================================================================================
+*/

@@ -123,7 +123,8 @@ export default function Home() {
         onSubmit={handleQuestionnaireSubmit}
       />
 
-      {/* Auth / Registration Modal */}
+      {/* Auth / Registration Modal (Softlocked from view) */}
+      {/* 
       <AuthModal 
         isOpen={authOpen} 
         onClose={() => setAuthOpen(false)} 
@@ -131,6 +132,7 @@ export default function Home() {
         verifyOTP={verifyOTP} 
         signInWithGoogle={signInWithGoogle} 
       />
+      */}
 
       {/* Lucky Draw Modal */}
       <LuckyDrawModal 
